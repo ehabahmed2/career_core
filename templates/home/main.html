@@ -1,0 +1,507 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Career Core | Premier Recruitment Solutions{% endblock %}
+{% block description %}Connecting top talent with industry-leading companies through innovative recruitment solutions. Experience the Career Core difference.{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Import Montserrat font */
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap');
+    
+    /* Hero Section */
+    .hero {
+        background: linear-gradient(rgba(10, 36, 99, 0.9), url('{% static 'img/hero-bg.jpg' %}') center/cover;
+        min-height: 85vh;
+        display: flex;
+        align-items: center;
+        color: var(--light-gold);
+        position: relative;
+        padding: 2rem 0;
+    }
+    
+    .hero-content {
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .hero h1 {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 800;
+        font-size: 4.5rem;
+        letter-spacing: 3px;
+        margin-bottom: 1.5rem;
+        text-transform: uppercase;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.8rem;
+        margin-bottom: 2.5rem;
+        font-weight: 300;
+        letter-spacing: 1px;
+    }
+    
+    .gold-divider {
+        height: 4px;
+        width: 200px;
+        background-color: var(--accent-gold);
+        margin: 2rem auto;
+        border-radius: 2px;
+    }
+    
+    .btn-hero {
+        background-color: var(--accent-gold);
+        color: var(--primary-navy);
+        padding: 0.8rem 2.5rem;
+        font-weight: 600;
+        border-radius: 30px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-top: 1.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-hero:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* Stats Section */
+    .stats-section {
+        background-color: var(--white);
+        padding: 5rem 0;
+    }
+    
+    .stat-container {
+        text-align: center;
+        padding: 1.5rem;
+    }
+    
+    .stat-circle {
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        border: 4px solid var(--accent-gold);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        position: relative;
+        transition: transform 0.3s ease;
+    }
+    
+    .stat-circle:hover {
+        transform: scale(1.05);
+    }
+    
+    .stat-number {
+        font-size: 3.5rem;
+        font-weight: 700;
+        color: var(--accent-gold);
+        line-height: 1;
+    }
+    
+    .stat-label {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--primary-navy);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    /* Process Section */
+    .process-section {
+        background-color: var(--light-gold);
+        padding: 6rem 0;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .section-title {
+        color: var(--primary-navy);
+        text-align: center;
+        margin-bottom: 3.5rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        position: relative;
+    }
+    
+    .section-title:after {
+        content: '';
+        display: block;
+        width: 80px;
+        height: 4px;
+        background: var(--accent-gold);
+        margin: 15px auto 0;
+    }
+    
+    .process-steps {
+        display: flex;
+        justify-content: space-between;
+        position: relative;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+    
+    .process-step {
+        text-align: center;
+        flex: 1;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .step-icon {
+        width: 120px;
+        height: 120px;
+        background: var(--white);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        border: 3px solid var(--accent-gold);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .step-icon i {
+        font-size: 3rem;
+        color: var(--primary-navy);
+    }
+    
+    .step-title {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: var(--primary-navy);
+        margin-bottom: 0.8rem;
+    }
+    
+    .step-description {
+        color: var(--primary-navy);
+        max-width: 220px;
+        margin: 0 auto;
+        opacity: 0.9;
+    }
+    
+    .process-connector {
+        position: absolute;
+        top: 60px;
+        left: 15%;
+        width: 70%;
+        height: 4px;
+        background: var(--accent-gold);
+        z-index: 1;
+    }
+    
+    .process-arrow {
+        position: absolute;
+        top: 54px;
+        right: 15%;
+        font-size: 2rem;
+        color: var(--accent-gold);
+    }
+    
+    /* Clients Section */
+    .clients-section {
+        padding: 5rem 0;
+        background-color: var(--white);
+    }
+    
+    .client-logo {
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 20px;
+        opacity: 0.7;
+        transition: opacity 0.3s ease;
+    }
+    
+    .client-logo:hover {
+        opacity: 1;
+    }
+    
+    .client-logo img {
+        max-height: 100%;
+        max-width: 100%;
+        filter: grayscale(100%);
+        transition: filter 0.3s ease;
+    }
+    
+    .client-logo:hover img {
+        filter: grayscale(0%);
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 992px) {
+        .hero h1 {
+            font-size: 3.5rem;
+        }
+        
+        .process-steps {
+            flex-wrap: wrap;
+        }
+        
+        .process-step {
+            flex: 0 0 50%;
+            margin-bottom: 3rem;
+        }
+        
+        .process-connector, .process-arrow {
+            display: none;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .hero {
+            min-height: 75vh;
+        }
+        
+        .hero h1 {
+            font-size: 2.8rem;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.4rem;
+        }
+        
+        .stat-circle {
+            width: 150px;
+            height: 150px;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+        }
+        
+        .process-step {
+            flex: 0 0 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <h1>CAREER CORE</h1>
+            <div class="gold-divider"></div>
+            <p class="hero-subtitle">RECRUITMENT SOLUTIONS</p>
+            <p class="lead mb-4">Connecting exceptional talent with industry-leading companies through innovative recruitment strategies</p>
+            <a href="#process" class="btn btn-hero btn-lg scroll-link">Discover Our Process</a>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 stat-container">
+                <div class="stat-circle">
+                    <div>
+                        <span class="stat-number" id="companies-count">850</span>
+                        <span class="stat-number">+</span>
+                    </div>
+                </div>
+                <h3 class="stat-label">Companies Served</h3>
+            </div>
+            <div class="col-md-4 stat-container">
+                <div class="stat-circle">
+                    <div>
+                        <span class="stat-number" id="recruiters-count">1200</span>
+                        <span class="stat-number">+</span>
+                    </div>
+                </div>
+                <h3 class="stat-label">Expert Recruiters</h3>
+            </div>
+            <div class="col-md-4 stat-container">
+                <div class="stat-circle">
+                    <div>
+                        <span class="stat-number" id="placements-count">15K</span>
+                        <span class="stat-number">+</span>
+                    </div>
+                </div>
+                <h3 class="stat-label">Successful Placements</h3>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section id="process" class="process-section">
+    <div class="container">
+        <h2 class="section-title">How It Works</h2>
+        <div class="process-steps">
+            <div class="process-connector"></div>
+            <i class="fas fa-arrow-right process-arrow"></i>
+            
+            <div class="process-step">
+                <div class="step-icon">
+                    <i class="fas fa-building"></i>
+                </div>
+                <h3 class="step-title">Company</h3>
+                <p class="step-description">Businesses share their talent needs with us</p>
+            </div>
+            
+            <div class="process-step">
+                <div class="step-icon">
+                    <i class="fas fa-users-gear"></i>
+                </div>
+                <h3 class="step-title">Career Core</h3>
+                <p class="step-description">We analyze requirements and match with ideal candidates</p>
+            </div>
+            
+            <div class="process-step">
+                <div class="step-icon">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <h3 class="step-title">Recruiter</h3>
+                <p class="step-description">Specialized recruiters vet and prepare candidates</p>
+            </div>
+            
+            <div class="process-step">
+                <div class="step-icon">
+                    <i class="fas fa-handshake"></i>
+                </div>
+                <h3 class="step-title">Candidate</h3>
+                <p class="step-description">Perfect match is placed in the ideal position</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Trusted Companies Section -->
+<section class="clients-section">
+    <div class="container">
+        <h2 class="section-title">Trusted By Industry Leaders</h2>
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="client-carousel owl-carousel owl-theme">
+                    <div class="client-logo">
+                        <img src="{% static 'img/client1.png' %}" alt="Tech Innovate">
+                    </div>
+                    <div class="client-logo">
+                        <img src="{% static 'img/client2.png' %}" alt="Global Solutions">
+                    </div>
+                    <div class="client-logo">
+                        <img src="{% static 'img/client3.png' %}" alt="Future Enterprises">
+                    </div>
+                    <div class="client-logo">
+                        <img src="{% static 'img/client4.png' %}" alt="Prime Holdings">
+                    </div>
+                    <div class="client-logo">
+                        <img src="{% static 'img/client5.png' %}" alt="Venture Partners">
+                    </div>
+                    <div class="client-logo">
+                        <img src="{% static 'img/client6.png' %}" alt="Stellar Group">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Include Owl Carousel -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+<script>
+    // Initialize carousel when document is ready
+    $(document).ready(function(){
+        $(".client-carousel").owlCarousel({
+            loop: true,
+            margin: 20,
+            nav: true,
+            dots: false,
+            autoplay: true,
+            autoplayTimeout: 3000,
+            autoplayHoverPause: true,
+            responsive: {
+                0: { items: 2 },
+                600: { items: 3 },
+                1000: { items: 5 }
+            }
+        });
+        
+        // Smooth scrolling for anchor links
+        $(".scroll-link").on('click', function(event) {
+            if (this.hash !== "") {
+                event.preventDefault();
+                var hash = this.hash;
+                $('html, body').animate({
+                    scrollTop: $(hash).offset().top - 70
+                }, 800);
+            }
+        });
+        
+        // Animate stats counters
+        function animateCounter(element, finalValue, duration) {
+            let startValue = 0;
+            let increment = finalValue / duration;
+            let currentValue = startValue;
+            let stepTime = Math.abs(Math.floor(duration / finalValue));
+            
+            let timer = setInterval(function() {
+                currentValue += increment;
+                element.textContent = Math.floor(currentValue);
+                if (currentValue >= finalValue) {
+                    clearInterval(timer);
+                    element.textContent = finalValue;
+                }
+            }, stepTime);
+        }
+        
+        // Initialize counters when in viewport
+        function initCounters() {
+            if ($('#companies-count').isInViewport()) {
+                animateCounter(document.getElementById('companies-count'), 850, 2000);
+                animateCounter(document.getElementById('recruiters-count'), 1200, 2000);
+                animateCounter(document.getElementById('placements-count'), 15000, 2000);
+                // Remove event listener after triggering once
+                $(window).off('scroll', initCounters);
+            }
+        }
+        
+        // Helper function to check if element is in viewport
+        $.fn.isInViewport = function() {
+            var elementTop = $(this).offset().top;
+            var elementBottom = elementTop + $(this).outerHeight();
+            var viewportTop = $(window).scrollTop();
+            var viewportBottom = viewportTop + $(window).height();
+            return elementBottom > viewportTop && elementTop < viewportBottom;
+        };
+        
+        // Check on scroll and on load
+        $(window).on('scroll', initCounters);
+        $(document).ready(initCounters);
+    });
+</script>
+{% endblock %}
+
+{% block seo_extra %}
+<!-- Page-specific structured data -->
+<script type="application/ld+json">
+    {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Career Core Recruitment Solutions",
+    "description": "Connecting top talent with industry-leading companies through innovative recruitment solutions.",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Career Core",
+        "logo": "{% static 'img/logo.png' %}"
+    },
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.careercore.example.com"
+    }
+    }
+</script>
+{% endblock %}

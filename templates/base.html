@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- SEO Meta Tags -->
+    <title>{% block title %}Career Core Recruitment Solutions{% endblock %}</title>
+    <meta name="description" content="{% block description %}Leading recruitment solutions connecting top talent with premier organizations across industries.{% endblock %}">
+
+    <!-- Open Graph Meta Tags -->
+    {% comment %} <meta property="og:title" content="{% block og_title %}{% block title %}Career Core Recruitment Solutions{% endblock %}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{% block description %}{% endblock %}{% endblock %}"> {% endcomment %}
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    {% comment %} <meta property="og:image" content="{% block og_image %}{% static 'img/og-default.jpg' %}{% endblock %}"> {% endcomment %}
+    <meta property="og:site_name" content="Career Core">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+
+    <!-- Schema.org Organization Markup -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Career Core",
+        "url": "https://www.careercore.example.com",
+        "logo": "{% static 'img/logo.png' %}",
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+1-800-123-4567",
+            "contactType": "Customer service"
+        },
+        "sameAs": [
+            "https://www.linkedin.com/company/careercore",
+            "https://twitter.com/careercore"
+        ]
+    }
+    </script>
+
+    <!-- CSS Includes -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    
+    <!-- Color Variables -->
+    <style>
+        :root {
+            --primary-navy: #0A2463;
+            --accent-gold: #D4AF37;
+            --light-gold: #f1e6c8;
+            --white: #ffffff;
+            --light-gray: #f8f9fa;
+        }
+    </style>
+    
+    {% block extra_css %}{% endblock %}
+    {% block seo_extra %}{% endblock %}
+</head>
+<body>
+    <!-- Navbar Partial -->
+    {% include 'partials/nav.html' %}
+
+    <!-- Main Content -->
+    <main class="container-fluid px-0">
+        <div class="container-lg py-4 py-md-5">
+            {% block content %}
+            <!-- Page content will be injected here -->
+            {% endblock %}
+        </div>
+    </main>
+
+    <!-- Footer Partial -->
+    {% include 'partials/footer.html' %}
+
+    <!-- Cookie Consent Partial -->
+    {% include 'partials/cookie_consent.html' %}
+
+    <!-- JS Includes -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
