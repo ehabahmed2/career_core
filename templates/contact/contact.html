@@ -1,0 +1,362 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Contact Us - Career Core{% endblock %}
+{% block description %}Get in touch with Career Core's recruitment experts. We're here to help with your hiring needs or career questions.{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Contact Page Styles */
+    .contact-hero {
+        background: linear-gradient(135deg, rgba(10, 36, 99, 0.9) 0%, rgba(10, 36, 99, 0.95) 100%), 
+                    url('{% static 'img/contact-bg.jpg' %}') center/cover;
+        padding: 5rem 0;
+        color: white;
+        text-align: center;
+    }
+    
+    .contact-container {
+        padding: 5rem 0;
+    }
+    
+    .contact-card {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        overflow: hidden;
+        height: 100%;
+    }
+    
+    .contact-info {
+        padding: 3rem;
+        background-color: var(--light-gold);
+    }
+    
+    .contact-info h3 {
+        color: var(--primary-navy);
+        margin-bottom: 2rem;
+        position: relative;
+    }
+    
+    .contact-info h3:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -10px;
+        width: 50px;
+        height: 3px;
+        background: var(--accent-gold);
+    }
+    
+    .contact-method {
+        display: flex;
+        margin-bottom: 1.5rem;
+        align-items: flex-start;
+    }
+    
+    .contact-icon {
+        width: 50px;
+        height: 50px;
+        background: var(--primary-navy);
+        color: var(--accent-gold);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        margin-right: 1.5rem;
+        flex-shrink: 0;
+    }
+    
+    .contact-details h4 {
+        color: var(--primary-navy);
+        margin-bottom: 0.3rem;
+    }
+    
+    .contact-details p, .contact-details a {
+        color: #555;
+        margin-bottom: 0;
+    }
+    
+    .contact-details a:hover {
+        color: var(--accent-gold);
+    }
+    
+    .contact-form {
+        padding: 3rem;
+    }
+    
+    .form-control {
+        border-radius: 4px;
+        padding: 0.8rem 1rem;
+        border: 1px solid #ddd;
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-control:focus {
+        border-color: var(--accent-gold);
+        box-shadow: 0 0 0 0.25rem rgba(212, 175, 55, 0.25);
+    }
+    
+    .btn-submit {
+        background: var(--accent-gold);
+        color: var(--primary-navy);
+        padding: 0.8rem 2.5rem;
+        border: none;
+        border-radius: 4px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-submit:hover {
+        background: #c19b2c;
+        transform: translateY(-2px);
+    }
+    
+    .map-container {
+        height: 400px;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        margin-top: 5rem;
+    }
+    
+    .map-container iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 992px) {
+        .contact-info {
+            padding: 2rem;
+        }
+        
+        .contact-form {
+            padding: 2rem;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .contact-hero {
+            padding: 3rem 0;
+        }
+        
+        .contact-container {
+            padding: 3rem 0;
+        }
+        
+        .contact-method {
+            flex-direction: column;
+        }
+        
+        .contact-icon {
+            margin-bottom: 1rem;
+            margin-right: 0;
+        }
+    }
+    
+    .btn-whatsapp {
+    background-color: #25D366;
+    color: white;
+    font-weight: 600;
+    padding: 0.5rem 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    max-width: 212px;
+    }
+    
+    .btn-whatsapp:hover {
+        background-color: #128C7E;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .btn-whatsapp i {
+        margin-right: 10px;
+        font-size: 1.2rem;
+    }
+    
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Contact Hero Section -->
+<section class="contact-hero">
+    <div class="container">
+        <h1 class="display-4 mb-3">Let's Connect</h1>
+        <p class="lead">We're here to help you find the right talent or your next career opportunity</p>
+    </div>
+</section>
+
+<!-- Contact Content -->
+<section class="contact-container">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-5 mb-4 mb-lg-0">
+                <div class="contact-card">
+                    <div class="contact-info">
+                        <h3>Contact Information</h3>
+                        
+                        <div class="contact-method">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h4>Our Office</h4>
+                                <p>123 Recruitment Avenue<br>Cairo, Egypt</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-method">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone-alt"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h4>Call Us</h4>
+                                <p><a href="tel:+201234567890">+20 123 456 7890</a></p>
+                                <p><a href="tel:+201234567891">+20 123 456 7891</a></p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-method">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h4>Email Us</h4>
+                                <p><a href="mailto:info@careercore.com">info@careercore.com</a></p>
+                                <p><a href="mailto:hr@careercore.com">hr@careercore.com</a></p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-method">
+                            <div class="contact-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h4>Working Hours</h4>
+                                <p>Sunday - Thursday: 9AM - 6PM</p>
+                                <p>Friday - Saturday: Closed</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-7">
+                <div class="contact-card">
+                    <div class="contact-form">
+                        <h3 class="mb-4">Send Us a Message</h3>
+                        <form id="contactForm" method="POST">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" name="name" placeholder="Your Name" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="email" class="form-control" name="email" placeholder="Your Email" required>
+                                </div>
+                            </div>
+                            <input type="text" class="form-control" name="subject" placeholder="Subject" required>
+                            <select class="form-control" name="inquiry_type" required>
+                                <option value="">Select Inquiry Type</option>
+                                <option value="job_seeker">Job Seeker</option>
+                                <option value="employer">Employer</option>
+                                <option value="general">General Inquiry</option>
+                                <option value="partnership">Partnership</option>
+                            </select>
+                            <textarea class="form-control" name="message" rows="5" placeholder="Your Message" required></textarea>
+                            <button type="submit" class="btn btn-submit">Send Message</button>
+                        </form>
+                            <a href="https://wa.me/201010110110" class="btn btn-whatsapp mt-4">
+                                <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+                            </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="map-container">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3453.676346895356!2d31.23594931511492!3d30.04441998188381!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzDCsDAyJzM5LjkiTiAzMcKwMTQnMTMuOSJF!5e0!3m2!1sen!2seg!4v1620000000000!5m2!1sen!2seg" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        // Form submission handling
+        $('#contactForm').submit(function(e) {
+            e.preventDefault();
+            var form = $(this);
+            var submitButton = form.find('button[type="submit"]');
+            
+            // Change button text and disable during submission
+            submitButton.html('<i class="fas fa-spinner fa-spin"></i> Sending...');
+            submitButton.prop('disabled', true);
+            
+            // Simulate form submission (replace with actual AJAX call)
+            setTimeout(function() {
+                // This would be replaced with actual AJAX call to your backend
+                alert('Thank you for your message! We will contact you soon.');
+                form.trigger("reset");
+                submitButton.html('Send Message');
+                submitButton.prop('disabled', false);
+            }, 1500);
+        });
+        
+        // Smooth scroll to form on error
+        if(window.location.hash === '#contact-error') {
+            $('html, body').animate({
+                scrollTop: $('#contactForm').offset().top - 100
+            }, 800);
+        }
+    });
+</script>
+{% endblock %}
+
+{% block seo_extra %}
+    <script type="application/ld+json">
+    {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Contact Career Core",
+    "description": "Contact page for Career Core recruitment agency",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Career Core",
+        "logo": "{% static 'images/logo.svg' %}"
+    },
+    "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "123 Recruitment Avenue",
+        "addressLocality": "Cairo",
+        "addressRegion": "Cairo",
+        "postalCode": "11511",
+        "addressCountry": "EG"
+    },
+    "telephone": "+201234567890",
+    "email": "info@careercore.com",
+    "openingHours": "Mo, Tu, We, Th, Fr 09:00-18:00",
+    "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday"
+        ],
+        "opens": "09:00",
+        "closes": "18:00"
+    }
+    }
+    </script>
+{% endblock %}

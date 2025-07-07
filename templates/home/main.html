@@ -5,19 +5,25 @@
 {% block description %}Connecting top talent with industry-leading companies through innovative recruitment solutions. Experience the Career Core difference.{% endblock %}
 
 {% block extra_css %}
+    <!-- Load Owl Carousel CSS here -->
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+
 <style>
-    /* Import Montserrat font */
+/* Import Montserrat font */
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap');
     
     /* Hero Section */
     .hero {
-        background: linear-gradient(rgba(10, 36, 99, 0.9), url('{% static 'img/hero-bg.jpg' %}') center/cover;
+        background: linear-gradient(rgba(10, 36, 99, 0.9), rgba(10, 36, 99, 0.9)), url('{% static 'img/hero-bg.jpg' %}') center/cover;
         min-height: 85vh;
         display: flex;
         align-items: center;
         color: var(--light-gold);
         position: relative;
         padding: 2rem 0;
+        border-radius: 15px;
     }
     
     .hero-content {
@@ -303,7 +309,7 @@
             <div class="col-md-4 stat-container">
                 <div class="stat-circle">
                     <div>
-                        <span class="stat-number" id="companies-count">850</span>
+                        <span class="stat-number" id="companies-count">50</span>
                         <span class="stat-number">+</span>
                     </div>
                 </div>
@@ -312,7 +318,7 @@
             <div class="col-md-4 stat-container">
                 <div class="stat-circle">
                     <div>
-                        <span class="stat-number" id="recruiters-count">1200</span>
+                        <span class="stat-number" id="recruiters-count">300</span>
                         <span class="stat-number">+</span>
                     </div>
                 </div>
@@ -321,7 +327,7 @@
             <div class="col-md-4 stat-container">
                 <div class="stat-circle">
                     <div>
-                        <span class="stat-number" id="placements-count">15K</span>
+                        <span class="stat-number" id="placements-count">5K</span>
                         <span class="stat-number">+</span>
                     </div>
                 </div>
@@ -382,22 +388,22 @@
             <div class="col-lg-10">
                 <div class="client-carousel owl-carousel owl-theme">
                     <div class="client-logo">
-                        <img src="{% static 'img/client1.png' %}" alt="Tech Innovate">
+                        <img src="{% static 'images/client1.svg' %}" alt="Tech Innovate">
                     </div>
                     <div class="client-logo">
-                        <img src="{% static 'img/client2.png' %}" alt="Global Solutions">
+                        <img src="{% static 'images/client2.svg' %}" alt="Global Solutions">
                     </div>
                     <div class="client-logo">
-                        <img src="{% static 'img/client3.png' %}" alt="Future Enterprises">
+                        <img src="{% static 'images/client3.svg' %}" alt="Future Enterprises">
                     </div>
                     <div class="client-logo">
-                        <img src="{% static 'img/client4.png' %}" alt="Prime Holdings">
+                        <img src="{% static 'images/client1.svg' %}" alt="Prime Holdings">
                     </div>
                     <div class="client-logo">
-                        <img src="{% static 'img/client5.png' %}" alt="Venture Partners">
+                        <img src="{% static 'images/client5.svg' %}" alt="Venture Partners">
                     </div>
                     <div class="client-logo">
-                        <img src="{% static 'img/client6.png' %}" alt="Stellar Group">
+                        <img src="{% static 'images/client6.svg' %}" alt="Stellar Group">
                     </div>
                 </div>
             </div>
@@ -407,9 +413,9 @@
 {% endblock %}
 
 {% block extra_js %}
-<!-- Include Owl Carousel -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+<!-- Load jQuery first -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Then load Owl Carousel -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 
 <script>
@@ -461,9 +467,9 @@
         // Initialize counters when in viewport
         function initCounters() {
             if ($('#companies-count').isInViewport()) {
-                animateCounter(document.getElementById('companies-count'), 850, 2000);
-                animateCounter(document.getElementById('recruiters-count'), 1200, 2000);
-                animateCounter(document.getElementById('placements-count'), 15000, 2000);
+                animateCounter(document.getElementById('companies-count'), 50, 200);
+                animateCounter(document.getElementById('recruiters-count'), 300, 400);
+                animateCounter(document.getElementById('placements-count'), 900, 550);
                 // Remove event listener after triggering once
                 $(window).off('scroll', initCounters);
             }
@@ -488,20 +494,20 @@
 {% block seo_extra %}
 <!-- Page-specific structured data -->
 <script type="application/ld+json">
-    {
-    "@context": "https://schema.org",
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Career Core Recruitment Solutions",
+  "description": "Connecting top talent with industry-leading companies through innovative recruitment solutions.",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Career Core",
+    "logo": "{% static 'images/logo.svg' %}"
+  },
+  "mainEntityOfPage": {
     "@type": "WebPage",
-    "name": "Career Core Recruitment Solutions",
-    "description": "Connecting top talent with industry-leading companies through innovative recruitment solutions.",
-    "publisher": {
-        "@type": "Organization",
-        "name": "Career Core",
-        "logo": "{% static 'img/logo.png' %}"
-    },
-    "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "https://www.careercore.example.com"
-    }
-    }
+    "@id": "https://www.careercore.example.com"
+  }
+}
 </script>
 {% endblock %}

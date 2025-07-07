@@ -11,12 +11,12 @@
     <meta name="description" content="{% block description %}Leading recruitment solutions connecting top talent with premier organizations across industries.{% endblock %}">
 
     <!-- Open Graph Meta Tags -->
-    {% comment %} <meta property="og:title" content="{% block og_title %}{% block title %}Career Core Recruitment Solutions{% endblock %}{% endblock %}">
-    <meta property="og:description" content="{% block og_description %}{% block description %}{% endblock %}{% endblock %}"> {% endcomment %}
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ request.build_absolute_uri }}">
-    {% comment %} <meta property="og:image" content="{% block og_image %}{% static 'img/og-default.jpg' %}{% endblock %}"> {% endcomment %}
     <meta property="og:site_name" content="Career Core">
+    {% block og_meta %}
+    <meta property="og:image" content="{% block og_image %}{% static 'img/og-default.jpg' %}{% endblock %}">
+    {% endblock %}
 
     <!-- Canonical URL -->
     <link rel="canonical" href="{{ request.build_absolute_uri }}">
@@ -31,7 +31,7 @@
         "logo": "{% static 'img/logo.png' %}",
         "contactPoint": {
             "@type": "ContactPoint",
-            "telephone": "+1-800-123-4567",
+            "telephone": "+20 123 456 7890",
             "contactType": "Customer service"
         },
         "sameAs": [
@@ -66,11 +66,19 @@
 
     <!-- Main Content -->
     <main class="container-fluid px-0">
+        {% block full_width_content %}
         <div class="container-lg py-4 py-md-5">
+
+
+
             {% block content %}
             <!-- Page content will be injected here -->
             {% endblock %}
+
+
+
         </div>
+        {% endblock %}
     </main>
 
     <!-- Footer Partial -->

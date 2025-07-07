@@ -1,0 +1,597 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Current Job Openings - Career Core{% endblock %}
+{% block description %}Browse positions from TP Contentrix, telesales, customer service, and leading Egyptian companies. Find your next career opportunity today.{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Job Listings Page Styles */
+    .jobs-hero {
+        background: linear-gradient(rgba(10, 36, 99, 0.9), rgba(10, 36, 99, 0.9)), url('{% static 'img/jobs-bg.jpg' %}') center/cover;
+        padding: 5rem 0;
+        color: white;
+        text-align: center;
+    }
+    
+    .jobs-container {
+        display: flex;
+        gap: 2rem;
+        padding: 3rem 0;
+    }
+    
+    /* Filter Sidebar */
+    .filter-sidebar {
+        flex: 0 0 280px;
+        background: white;
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        height: fit-content;
+    }
+    
+    .filter-section {
+        margin-bottom: 2rem;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 1.5rem;
+    }
+    
+    .filter-section:last-child {
+        border-bottom: none;
+    }
+    
+    .filter-title {
+        color: var(--primary-navy);
+        font-weight: 600;
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .filter-option {
+        margin-bottom: 0.8rem;
+        display: flex;
+        align-items: center;
+    }
+    
+    .filter-option input {
+        margin-right: 0.8rem;
+    }
+    
+    .filter-option label {
+        color: var(--primary-navy);
+        cursor: pointer;
+        font-size: 0.95rem;
+    }
+    
+    .filter-option input:checked + label {
+        color: var(--accent-gold);
+        font-weight: 500;
+    }
+    
+    .filter-reset {
+        color: var(--primary-navy);
+        text-decoration: underline;
+        font-size: 0.9rem;
+        cursor: pointer;
+        display: inline-block;
+        margin-top: 0.5rem;
+    }
+    
+    /* Job Cards Grid */
+    .jobs-grid {
+        flex: 1;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+    
+    .job-card {
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        border-left: 4px solid var(--accent-gold);
+        position: relative;
+    }
+    
+    .job-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    
+    .job-card-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .job-card-body {
+        padding: 1.5rem;
+    }
+    
+    .company-logo-container {
+        width: 60px;
+        height: 60px;
+        border-radius: 8px;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #eee;
+        overflow: hidden;
+        margin-bottom: 1rem;
+    }
+    
+    .company-logo {
+        max-width: 80%;
+        max-height: 80%;
+        object-fit: contain;
+    }
+    
+    .job-title {
+        color: var(--primary-navy);
+        font-weight: 600;
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .company-name {
+        color: #666;
+        font-size: 0.95rem;
+        margin-bottom: 1rem;
+    }
+    
+    .job-details {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .job-detail {
+        display: flex;
+        align-items: center;
+        color: var(--primary-navy);
+        font-size: 0.9rem;
+    }
+    
+    .job-detail i {
+        color: var(--accent-gold);
+        margin-right: 0.5rem;
+        font-size: 1rem;
+    }
+    
+    .job-card-footer {
+        padding: 0 1.5rem 1.5rem;
+    }
+    
+    .btn-view-details {
+        background-color: var(--primary-navy);
+        color: white;
+        padding: 0.6rem 1.5rem;
+        border-radius: 4px;
+        font-weight: 500;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        display: inline-block;
+        width: 100%;
+        text-align: center;
+    }
+    
+    .btn-view-details:hover {
+        background-color: var(--accent-gold);
+        color: var(--primary-navy);
+    }
+    
+    /* Pagination */
+    .pagination-container {
+        margin-top: 3rem;
+        display: flex;
+        justify-content: center;
+    }
+    
+    .pagination {
+        display: flex;
+        gap: 0.5rem;
+    }
+    
+    .page-item {
+        list-style: none;
+    }
+    
+    .page-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 4px;
+        background: white;
+        color: var(--primary-navy);
+        font-weight: 500;
+        border: 1px solid #ddd;
+        transition: all 0.3s ease;
+    }
+    
+    .page-link:hover {
+        background: var(--light-gold);
+        border-color: var(--accent-gold);
+    }
+    
+    .page-item.active .page-link {
+        background: var(--accent-gold);
+        color: var(--primary-navy);
+        border-color: var(--accent-gold);
+    }
+    
+    .page-item.disabled .page-link {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+    
+    /* Loading Animation */
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255,255,255,0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+    
+    .loading-overlay.active {
+        opacity: 1;
+        pointer-events: all;
+    }
+    
+    .spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid var(--light-gold);
+        border-top-color: var(--accent-gold);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 992px) {
+        .jobs-container {
+            flex-direction: column;
+        }
+        
+        .filter-sidebar {
+            flex: 1;
+            width: 100%;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .jobs-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .jobs-hero {
+            padding: 3rem 0;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Jobs Hero Section -->
+<section class="jobs-hero">
+    <div class="container">
+        <h1 class="display-5 mb-3">Find Your Next Opportunity</h1>
+        <p class="lead">Browse our latest job openings from top employers</p>
+    </div>
+</section>
+
+<!-- Main Jobs Container -->
+<div class="container">
+    <div class="jobs-container">
+        <!-- Filter Sidebar -->
+        <aside class="filter-sidebar">
+            <div class="filter-section">
+                <h3 class="filter-title">Companies</h3>
+                <div class="filter-option">
+                    <input type="checkbox" id="company-tp" class="company-filter" value="TP Contentrix">
+                    <label for="company-tp">TP Contentrix</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="company-tele" class="company-filter" value="Telesales">
+                    <label for="company-tele">Telesales</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="company-cs" class="company-filter" value="Customer Service">
+                    <label for="company-cs">Customer Service</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="company-tech" class="company-filter" value="Technology">
+                    <label for="company-tech">Technology</label>
+                </div>
+                <a class="filter-reset" id="reset-companies">Reset</a>
+            </div>
+            
+            <div class="filter-section">
+                <h3 class="filter-title">Salary Range</h3>
+                <div class="filter-option">
+                    <input type="checkbox" id="salary-5" class="salary-filter" value="5000">
+                    <label for="salary-5">5,000 - 10,000 EGP</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="salary-10" class="salary-filter" value="10000">
+                    <label for="salary-10">10,000 - 15,000 EGP</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="salary-15" class="salary-filter" value="15000">
+                    <label for="salary-15">15,000+ EGP</label>
+                </div>
+                <a class="filter-reset" id="reset-salary">Reset</a>
+            </div>
+            
+            <div class="filter-section">
+                <h3 class="filter-title">Location</h3>
+                <div class="filter-option">
+                    <input type="checkbox" id="location-cairo" class="location-filter" value="Cairo">
+                    <label for="location-cairo">Cairo</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="location-giza" class="location-filter" value="Giza">
+                    <label for="location-giza">Giza</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="location-alex" class="location-filter" value="Alexandria">
+                    <label for="location-alex">Alexandria</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="location-remote" class="location-filter" value="Remote">
+                    <label for="location-remote">Remote</label>
+                </div>
+                <a class="filter-reset" id="reset-location">Reset</a>
+            </div>
+            
+            <button id="apply-filters" class="btn btn-primary w-100" style="background-color: var(--primary-navy); border: none;">
+                Apply Filters
+            </button>
+        </aside>
+        
+        <!-- Jobs Grid -->
+        <div class="jobs-content">
+            <div id="jobs-grid" class="jobs-grid">
+                <!-- Job cards will be loaded here via AJAX -->
+                {% include 'partials/job_cards.html' %}
+            </div>
+            
+            <!-- Pagination -->
+            <div class="pagination-container">
+                <ul class="pagination" id="pagination">
+                    <li class="page-item {% if not jobs.has_previous %}disabled{% endif %}">
+                        <a class="page-link" href="?page=1">&laquo;</a>
+                    </li>
+                    {% for num in jobs.paginator.page_range %}
+                        {% if num == jobs.number %}
+                            <li class="page-item active">
+                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    <li class="page-item {% if not jobs.has_next %}disabled{% endif %}">
+                        <a class="page-link" href="?page={{ jobs.paginator.num_pages }}">&raquo;</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loading-overlay">
+    <div class="spinner"></div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        // Initialize variables
+        let currentFilters = {
+            companies: [],
+            salary: [],
+            locations: []
+        };
+        
+        // Filter change handlers
+        $('.company-filter').change(function() {
+            const value = $(this).val();
+            if ($(this).is(':checked')) {
+                currentFilters.companies.push(value);
+            } else {
+                currentFilters.companies = currentFilters.companies.filter(item => item !== value);
+            }
+        });
+        
+        $('.salary-filter').change(function() {
+            const value = $(this).val();
+            if ($(this).is(':checked')) {
+                currentFilters.salary.push(value);
+            } else {
+                currentFilters.salary = currentFilters.salary.filter(item => item !== value);
+            }
+        });
+        
+        $('.location-filter').change(function() {
+            const value = $(this).val();
+            if ($(this).is(':checked')) {
+                currentFilters.locations.push(value);
+            } else {
+                currentFilters.locations = currentFilters.locations.filter(item => item !== value);
+            }
+        });
+        
+        // Reset buttons
+        $('#reset-companies').click(function() {
+            $('.company-filter').prop('checked', false);
+            currentFilters.companies = [];
+            applyFilters();
+        });
+        
+        $('#reset-salary').click(function() {
+            $('.salary-filter').prop('checked', false);
+            currentFilters.salary = [];
+            applyFilters();
+        });
+        
+        $('#reset-location').click(function() {
+            $('.location-filter').prop('checked', false);
+            currentFilters.locations = [];
+            applyFilters();
+        });
+        
+        // Apply filters button
+        $('#apply-filters').click(function() {
+            applyFilters();
+        });
+        
+        // AJAX filtering function
+        function applyFilters(page = 1) {
+            $('#loading-overlay').addClass('active');
+            
+            $.ajax({
+                url: window.location.pathname,
+                type: 'GET',
+                data: {
+                    companies: currentFilters.companies.join(','),
+                    salary: currentFilters.salary.join(','),
+                    locations: currentFilters.locations.join(','),
+                    page: page
+                },
+                success: function(data) {
+                    $('#jobs-grid').html($(data).find('#jobs-grid').html());
+                    $('#pagination').html($(data).find('#pagination').html());
+                    $('#loading-overlay').removeClass('active');
+                    
+                    // Update URL without reload
+                    const params = new URLSearchParams(window.location.search);
+                    params.set('page', page);
+                    if (currentFilters.companies.length) params.set('companies', currentFilters.companies.join(','));
+                    else params.delete('companies');
+                    if (currentFilters.salary.length) params.set('salary', currentFilters.salary.join(','));
+                    else params.delete('salary');
+                    if (currentFilters.locations.length) params.set('locations', currentFilters.locations.join(','));
+                    else params.delete('locations');
+                    
+                    history.pushState(null, '', '?' + params.toString());
+                },
+                error: function() {
+                    $('#loading-overlay').removeClass('active');
+                    alert('Error applying filters. Please try again.');
+                }
+            });
+        }
+        
+        // Pagination click handler
+        $(document).on('click', '.page-link', function(e) {
+            e.preventDefault();
+            const page = $(this).attr('href').split('page=')[1];
+            applyFilters(page);
+        });
+        
+        // Initialize filters from URL params
+        function initFiltersFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            
+            // Companies
+            if (params.has('companies')) {
+                const companies = params.get('companies').split(',');
+                companies.forEach(company => {
+                    $(`.company-filter[value="${company}"]`).prop('checked', true);
+                    currentFilters.companies.push(company);
+                });
+            }
+            
+            // Salary
+            if (params.has('salary')) {
+                const salaries = params.get('salary').split(',');
+                salaries.forEach(salary => {
+                    $(`.salary-filter[value="${salary}"]`).prop('checked', true);
+                    currentFilters.salary.push(salary);
+                });
+            }
+            
+            // Locations
+            if (params.has('locations')) {
+                const locations = params.get('locations').split(',');
+                locations.forEach(location => {
+                    $(`.location-filter[value="${location}"]`).prop('checked', true);
+                    currentFilters.locations.push(location);
+                });
+            }
+        }
+        
+        initFiltersFromUrl();
+    });
+</script>
+{% endblock %}
+
+{% block seo_extra %}
+    <script type="application/ld+json">
+    {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Current Job Openings at Career Core",
+    "description": "Browse available positions from leading employers in Egypt",
+    "url": "{{ request.build_absolute_uri }}",
+    "numberOfItems": "{{ jobs.paginator.count }}",
+    "itemListElement": [
+        {% for job in jobs %}
+        {
+        "@type": "ListItem",
+        "position": {{ forloop.counter }},
+        "item": {
+            "@type": "JobPosting",
+            "title": "{{ job.title }}",
+            "description": "{{ job.description|truncatewords:20 }}",
+            "hiringOrganization": {
+            "@type": "Organization",
+            "name": "{{ job.company }}"
+            },
+            "jobLocation": {
+            "@type": "Place",
+            "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "{{ job.location }}"
+            }
+            },
+            "baseSalary": {
+            "@type": "MonetaryAmount",
+            "currency": "EGP",
+            "value": {
+                "@type": "QuantitativeValue",
+                "minValue": "{{ job.salary_min }}",
+                "maxValue": "{{ job.salary_max }}"
+            }
+            }
+        }
+        }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ]
+    }
+</script>
+{% endblock %}

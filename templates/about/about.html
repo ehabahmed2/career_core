@@ -1,0 +1,415 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}About Us - Career Core{% endblock %}
+{% block description %}Learn how we empower Egyptian talent through innovative recruitment solutions and our commitment to connecting professionals with their dream careers.{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* About Page Custom Styles */
+    .about-hero {
+        background: linear-gradient(rgba(10, 36, 99, 0.9), rgba(10, 36, 99, 0.9)), url('{% static 'images/about_bg.jpeg' %}') center/cover;
+        padding: 6rem 0;
+        color: white;
+    }
+    
+    .mission-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        padding: 2.5rem;
+        margin-bottom: 3rem;
+        border-top: 6px solid var(--accent-gold);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .mission-card:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('{% static 'images/about_bg.jpeg' %}') repeat;
+        opacity: 0.05;
+        pointer-events: none;
+    }
+    
+    .mission-title {
+        color: var(--primary-navy);
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        position: relative;
+    }
+    
+    .mission-text {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        margin-bottom: 2rem;
+        color: #555;
+    }
+    
+    .btn-whatsapp {
+        background-color: #25D366;
+        color: white;
+        font-weight: 600;
+        padding: 0.8rem 2rem;
+        border-radius: 4px;
+        display: inline-flex;
+        align-items: center;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-whatsapp:hover {
+        background-color: #128C7E;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .btn-whatsapp i {
+        margin-right: 10px;
+        font-size: 1.2rem;
+    }
+    
+    /* Values Section */
+    .values-section {
+        padding: 5rem 0;
+        background-color: var(--light-gold);
+    }
+    
+    .section-heading {
+        color: var(--primary-navy);
+        margin-bottom: 3rem;
+        text-align: center;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    .values-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+    }
+    
+    .vision-column, .process-column {
+        flex: 1;
+        min-width: 300px;
+    }
+    
+    .value-item {
+        margin-bottom: 2.5rem;
+        position: relative;
+        padding-left: 1.5rem;
+    }
+    
+    .value-item:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 4px;
+        background: var(--accent-gold);
+    }
+    
+    .value-title {
+        color: var(--primary-navy);
+        font-weight: 600;
+        margin-bottom: 0.8rem;
+        font-size: 1.3rem;
+    }
+    
+    .value-description {
+        color: var(--primary-navy);
+        line-height: 1.7;
+        opacity: 0.9;
+    }
+    
+    .process-diagram {
+        background: white;
+        border-radius: 8px;
+        padding: 2rem;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    }
+    
+    .process-step {
+        display: flex;
+        margin-bottom: 1.5rem;
+        align-items: center;
+    }
+    
+    .step-number {
+        width: 40px;
+        height: 40px;
+        background: var(--accent-gold);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        margin-right: 1rem;
+        flex-shrink: 0;
+    }
+    
+    .step-content {
+        flex: 1;
+    }
+    
+    .step-title {
+        font-weight: 600;
+        color: var(--primary-navy);
+        margin-bottom: 0.3rem;
+    }
+    
+    .step-description {
+        color: var(--primary-navy);
+        opacity: 0.8;
+        font-size: 0.95rem;
+    }
+    
+    /* Team Section */
+    .team-section {
+        padding: 5rem 0;
+    }
+    
+    .team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+    }
+    
+    .team-member {
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+    
+    .member-photo {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        transition: transform 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .team-member:hover .member-photo {
+        transform: scale(1.05);
+    }
+    
+    .member-name {
+        font-weight: 600;
+        color: var(--primary-navy);
+        margin-bottom: 0.3rem;
+        font-size: 1.2rem;
+    }
+    
+    .member-position {
+        color: var(--accent-gold);
+        font-weight: 500;
+        font-size: 0.95rem;
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .values-container {
+            flex-direction: column;
+        }
+        
+        .vision-column, .process-column {
+            width: 100%;
+        }
+        
+        .about-hero {
+            padding: 4rem 0;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- About Hero Section -->
+<section class="about-hero">
+    <div class="container text-center">
+        <h1 class="display-4 mb-3">About Career Core</h1>
+        <p class="lead">Connecting Egyptian talent with global opportunities</p>
+    </div>
+</section>
+
+<!-- Mission Statement Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="mission-card">
+            <h2 class="mission-title">Our Mission</h2>
+            <p class="mission-text">
+                "We're here to empower talent in Egypt by bridging the gap between exceptional professionals 
+                and forward-thinking companies. Our mission is to transform the recruitment landscape through 
+                personalized solutions, industry expertise, and a commitment to long-term career success. 
+                We believe every professional deserves the right opportunity to thrive, and every company 
+                deserves access to top-tier talent."
+            </p>
+            <a href="https://wa.me/201010110110" class="btn btn-whatsapp">
+                <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Core Values Section -->
+<section class="values-section">
+    <div class="container">
+        <h2 class="section-heading">Our Core Values</h2>
+        <div class="values-container">
+            <div class="vision-column">
+                <div class="value-item">
+                    <h3 class="value-title">Vision</h3>
+                    <p class="value-description">
+                        To become Egypt's most trusted recruitment partner, recognized for our integrity, 
+                        innovation, and transformative impact on careers and businesses alike.
+                    </p>
+                </div>
+                
+                <div class="value-item">
+                    <h3 class="value-title">Excellence</h3>
+                    <p class="value-description">
+                        We set the highest standards in recruitment services, continuously improving our 
+                        processes to deliver exceptional results for both candidates and employers.
+                    </p>
+                </div>
+                
+                <div class="value-item">
+                    <h3 class="value-title">Integrity</h3>
+                    <p class="value-description">
+                        Honesty and transparency guide every interaction. We build relationships based on 
+                        trust and mutual respect.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="process-column">
+                <div class="process-diagram">
+                    <h3 class="value-title" style="padding-left: 0;">Our Process</h3>
+                    
+                    <div class="process-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4 class="step-title">Needs Assessment</h4>
+                            <p class="step-description">Understanding client requirements and candidate aspirations</p>
+                        </div>
+                    </div>
+                    
+                    <div class="process-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4 class="step-title">Talent Sourcing</h4>
+                            <p class="step-description">Strategic search using our extensive network and databases</p>
+                        </div>
+                    </div>
+                    
+                    <div class="process-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4 class="step-title">Rigorous Screening</h4>
+                            <p class="step-description">Multi-stage interviews and competency evaluations</p>
+                        </div>
+                    </div>
+                    
+                    <div class="process-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h4 class="step-title">Perfect Match</h4>
+                            <p class="step-description">Presenting ideal candidates with cultural fit analysis</p>
+                        </div>
+                    </div>
+                    
+                    <div class="process-step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <h4 class="step-title">Ongoing Support</h4>
+                            <p class="step-description">Post-placement follow-up and career development</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Team Section -->
+<section class="team-section">
+    <div class="container">
+        <h2 class="section-heading">Meet Our Leadership</h2>
+        <div class="team-grid">
+            <div class="team-member">
+                <img src="{% static 'images/founder2.jpeg' %}" alt="Sarah Mohamed" class="member-photo">
+                <h3 class="member-name">Sarah Mohamed</h3>
+                <p class="member-position">Founder & CEO</p>
+            </div>
+            
+            <div class="team-member">
+                <img src="{% static 'images/founder.jpeg' %}" alt="Ahmed Khalil" class="member-photo">
+                <h3 class="member-name">Ahmed Khalil</h3>
+                <p class="member-position">Director of Operations</p>
+            </div>
+            
+            <div class="team-member">
+                <img src="{% static 'images/mariam.jpeg' %}" alt="Mariam Farouk" class="member-photo">
+                <h3 class="member-name">Mariam Farouk</h3>
+                <p class="member-position">Head of Recruitment</p>
+            </div>
+            
+            <div class="team-member">
+                <img src="{% static 'images/omar.jpeg' %}" alt="Omar Hassan" class="member-photo">
+                <h3 class="member-name">Omar Hassan</h3>
+                <p class="member-position">Client Relations Manager</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block seo_extra %}
+<!-- About Page Structured Data -->
+<script type="application/ld+json">
+    {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "About Career Core",
+    "description": "Learn about Career Core's mission to empower Egyptian talent through innovative recruitment solutions.",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Career Core",
+        "logo": {
+        "@type": "ImageObject",
+        "url": "{% static 'images/logo.svg' %}"
+        }
+    },
+    "mainEntity": {
+        "@type": "Organization",
+        "name": "Career Core",
+        "description": "Leading recruitment agency in Egypt specializing in connecting top talent with premier organizations.",
+        "foundingDate": "2015",
+        "numberOfEmployees": "50",
+        "founders": [
+        {
+            "@type": "Person",
+            "name": "Sarah Mohamed"
+        }
+        ],
+        "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "123 Nile Corniche",
+        "addressLocality": "Cairo",
+        "addressRegion": "Cairo",
+        "postalCode": "11511",
+        "addressCountry": "EG"
+        }
+    }
+    }
+</script>
+{% endblock %}
