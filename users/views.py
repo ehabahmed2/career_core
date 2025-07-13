@@ -6,7 +6,9 @@ from .models import BaseUser
 from jobs.models import Job
 from django.http import HttpResponseForbidden
 from testimonials.models import Tmonials
-from .forms import LoginForm
+from .forms import LoginForm, RegisterForm
+import secrets
+from django.core.cache import cache 
 
 # Create your views here.
 User = get_user_model()
@@ -49,9 +51,45 @@ def login_form(request):
                 if user is not None:
                     login(request, user)
                     messages.success(request, f'Welcome to Career Core')
-                    return redirect('admin_dashboard')
+                    return redirect('home')
                 else:
                     messages.error(request, 'Invalid log in details')
         else: 
             form = LoginForm()
     return render(request, 'users/admins/login.html', context={'form': form})
+
+
+# register user
+def register(request):
+    if request.user.is_authenticated:
+        messages.info(request, 'You are logged in already!')
+        return redirect('home')
+    else:
+        if request.method == 'POST':
+            form = RegisterForm(request.POST)
+            # if form is valid then save it to db
+            if form.is_valid():
+                user = form.save()
+                messages.success(request, 'Registered successfully!')
+                # Generate unique token
+                token = secrets.token_urlsafe(32)
+                # Store token in cache with 5 minute expiration
+                cache.set(f'reg_success_{token}', True, 300)
+                
+                return redirect('registration_success', token=token)
+            else: 
+                messages.warning(request, 'Error with the details provided, kindly check your inputs!')
+        else:
+            form = RegisterForm()
+    return render(request, 'users/admins/register.html', context={'form':form})
+
+
+def registration_success(request, token):
+    if not cache.get(f'reg_success_{token}'):
+        messages.warning(request, "Invalid or expired registration token")
+        return redirect('register')
+    
+    # Delete token after use
+    cache.delete(f'reg_success_{token}')
+    return render(request, 'users/registration_success.html', context={})
+

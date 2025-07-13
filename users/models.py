@@ -19,7 +19,9 @@ class BaseUser(AbstractUser):
     created_at = models.DateTimeField(auto_now_add=True)
     photo = models.ImageField(
         upload_to='profiles/%y/%m/%d',
-        default='profiles/default.svg'
+        default='profiles/default.svg',
+        blank=True,
+        null=True,
     )
     
     username = models.CharField(
@@ -30,7 +32,7 @@ class BaseUser(AbstractUser):
     email = models.EmailField(unique=True)
     
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['full_name', 'username']  
+    REQUIRED_FIELDS = ['full_name', 'username',]  
     
     @property
     def is_admin(self):
