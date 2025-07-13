@@ -16,10 +16,10 @@
                 <h3 class="footer-title">Quick Links</h3>
                 <ul class="footer-links list-unstyled">
                     <li><a href="{% url 'home' %}"><i class="fas fa-chevron-right me-2"></i> Home</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right me-2"></i> About Us</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right me-2"></i> Job Listings</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right me-2"></i> Services</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right me-2"></i> Contact Us</a></li>
+                    <li><a href="{% url "about" %}"><i class="fas fa-chevron-right me-2"></i> About Us</a></li>
+                    <li><a href="{% url "job_listings" %}"><i class="fas fa-chevron-right me-2"></i> Job Listings</a></li>
+                    <li><a href=""><i class="fas fa-chevron-right me-2"></i> Services</a></li>
+                    <li><a href="{% url "contact" %}"><i class="fas fa-chevron-right me-2"></i> Contact Us</a></li>
                 </ul>
             </div>
             
@@ -60,7 +60,7 @@
         <div class="footer-bottom">
             <div class="row">
                 <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                    &copy; 2025 Career Core. All Rights Reserved.
+                    &copy; {{year}} Career Core. All Rights Reserved.
                 </div>
                 <div class="col-md-6 text-center text-md-end">
                     <a href="#" class="text-white me-3">Privacy Policy</a>

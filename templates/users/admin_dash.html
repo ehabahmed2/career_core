@@ -1,0 +1,845 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Admin Dashboard | Career Core{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Dashboard-specific styles */
+    .card-header {
+        background-color: var(--primary-navy);
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    
+    .card-header .btn {
+        background-color: var(--accent-gold);
+        color: var(--primary-navy);
+        font-weight: 600;
+        margin-top: 0.5rem;
+    }
+    
+    .table-responsive {
+        border-radius: 0.25rem;
+        overflow: hidden;
+    }
+    
+    .table th {
+        background-color: var(--primary-navy);
+        color: white;
+        white-space: nowrap;
+    }
+    
+    .status-badge {
+        padding: 0.25em 0.6em;
+        border-radius: 10rem;
+        font-size: 85%;
+        font-weight: 600;
+        display: inline-block;
+    }
+    
+    .badge-approved { background-color: #28a745; color: white; }
+    .badge-pending { background-color: #ffc107; color: black; }
+    .badge-suspended { background-color: #dc3545; color: white; }
+    .badge-active { background-color: #28a745; color: white; }
+    .badge-inactive { background-color: #6c757d; color: white; }
+    
+    .action-buttons {
+        display: flex;
+        flex-wrap: nowrap;
+    }
+    
+    .action-buttons .btn {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        margin: 0 2px;
+    }
+    
+    .badge-admin {
+        background-color: var(--primary-navy);
+        color: white;
+        padding: 0.25em 0.6em;
+        border-radius: 10rem;
+        font-size: 85%;
+        font-weight: 600;
+        display: inline-block;
+    }
+    
+    .filter-section {
+        background-color: var(--light-gray);
+        padding: 1rem;
+        border-radius: 0.25rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .export-btn {
+        background-color: var(--accent-gold);
+        color: var(--primary-navy);
+        font-weight: 600;
+    }
+    
+    .export-btn:hover {
+        background-color: #c19b2c;
+        color: var(--primary-navy);
+    }
+    
+    .testimonial-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+    }
+    
+    .testimonial-card {
+        border: 1px solid rgba(0,0,0,0.1);
+        border-radius: 10px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        transition: all 0.3s ease;
+        background: white;
+    }
+    
+    .testimonial-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    
+    .testimonial-img-container {
+        height: 200px;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .testimonial-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+    
+    .testimonial-body {
+        padding: 1.25rem;
+        flex-grow: 1;
+    }
+    
+    .testimonial-name {
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+        color: var(--primary-navy);
+    }
+    
+    .testimonial-title {
+        color: var(--accent-gold);
+        font-size: 0.9rem;
+        margin-bottom: 0.75rem;
+        font-weight: 500;
+    }
+    
+    .testimonial-text {
+        font-style: italic;
+        margin-bottom: 1rem;
+        position: relative;
+        padding-left: 1.5rem;
+    }
+    
+    .testimonial-text::before {
+        content: """;
+        position: absolute;
+        left: 0;
+        top: -0.5rem;
+        font-size: 3rem;
+        color: var(--accent-gold);
+        opacity: 0.2;
+        line-height: 1;
+    }
+    
+    .testimonial-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+        padding: 0 1.25rem 1.25rem;
+    }
+    
+    .toast-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1050;
+        min-width: 300px;
+    }
+    
+    .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+        vertical-align: middle;
+    }
+    
+    .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+    
+    .toggle-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 34px;
+    }
+    
+    .toggle-slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+    }
+    
+    input:checked + .toggle-slider {
+        background-color: #28a745;
+    }
+    
+    input:checked + .toggle-slider:before {
+        transform: translateX(26px);
+    }
+    
+    /* Responsive adjustments for mobile */
+    @media (max-width: 767px) {
+        .card-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        
+        .card-header h4,
+        .card-header h5 {
+            font-size: 1.1rem;
+        }
+        
+        .filter-section .row {
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .filter-section .col-md-4 {
+            width: 100%;
+            max-width: 100%;
+        }
+        
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            display: block;
+            width: 100%;
+        }
+        
+        .table {
+            width: 100%;
+            font-size: 0.85rem;
+        }
+        
+        .table th, 
+        .table td {
+            padding: 0.5rem;
+            min-width: 120px;
+        }
+        
+        .action-buttons {
+            flex-wrap: wrap;
+            gap: 3px;
+        }
+        
+        .action-buttons .btn {
+            padding: 0.2rem 0.4rem;
+            font-size: 0.75rem;
+        }
+        
+        .pagination {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .testimonial-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .testimonial-img-container {
+            height: 160px;
+        }
+        
+        .testimonial-body {
+            padding: 1rem;
+        }
+        
+        .testimonial-text {
+            padding-left: 1.2rem;
+        }
+        
+        .testimonial-text::before {
+            font-size: 2.5rem;
+            top: -0.4rem;
+        }
+        
+        .user-info {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+    }
+    
+    /* Adjustments for very small screens */
+    @media (max-width: 480px) {
+        .table th, 
+        .table td {
+            min-width: 100px;
+            font-size: 0.8rem;
+        }
+        
+        .toggle-switch {
+            width: 50px;
+            height: 28px;
+        }
+        
+        .toggle-slider:before {
+            height: 22px;
+            width: 22px;
+        }
+        
+        .testimonial-img-container {
+            height: 140px;
+        }
+        
+        .testimonial-actions .btn {
+            padding: 0.2rem 0.3rem;
+            font-size: 0.7rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="user-info mb-4">
+    <h2 class="d-inline-block me-3">Admin Dashboard</h2>
+    <span class="badge-admin">{{user.full_name}}</span>
+</div>
+
+<!-- Toast Notifications Container -->
+<div class="toast-container">
+    <div class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true" id="successToast">
+        <div class="d-flex">
+            <div class="toast-body">
+                Action completed successfully!
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<!-- Recruiter Management Section -->
+<div class="card mb-5" id="recruiter-management">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Recruiter Management</h4>
+        <button class="btn" data-bs-toggle="modal" data-bs-target="#addRecruiterModal">
+            <i class="fas fa-plus me-2"></i>Add Recruiter
+        </button>
+    </div>
+    <div class="card-body">
+
+        <div class="filter-section">
+            <h5>Filter Recruiters</h5>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Status</label>
+                    <select class="form-select">
+                        <option value="">All Statuses</option>
+                        <option value="approved">Approved</option>
+                        <option value="pending">Pending</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Type</label>
+                    <select class="form-select">
+                        <option value="">All Types</option>
+                        <option value="head">Head Recruiter</option>
+                        <option value="regular">Recruiter</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Date Joined</label>
+                    <input type="date" class="form-control">
+                </div>
+            </div>
+        </div>
+        
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for recruiter in recruiters %}
+                    {% if not recruiter.is_superuser %}
+                    <tr>
+                        <td>{{recruiter.full_name}}</td>
+                        <td>{{recruiter.email}}</td>
+                        {# Head Recruiter Status #}
+                        {% if recruiter.recruiter_profile.is_head_recruiter %}
+                        <td>Head Recruiter</td>
+                        {% else %}
+                        <td>Recruiter</td>
+                        {% endif %}
+                        
+                        {% comment %} Checking status  {% endcomment %}
+                        {% if recruiter.recruiter_profile.is_approved %}
+                        <td><span class="status-badge badge-approved">Approved</span></td>
+                        {% else %}
+                        <td><span class="status-badge badge-pending">Pending</span></td>
+                        {% endif %}
+
+
+                        <td class="action-buttons">
+                            <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="tooltip" title="Suspend">
+                                <i class="fas fa-pause"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteRecruiterModal">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                        {% else %}
+                        <td colspan="2">No profile found</td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <nav>
+            <ul class="pagination justify-content-end">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                </li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<!-- Offer Management Section -->
+<div class="card mb-5" id="offer-management">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Job Offer Management</h4>
+        <button class="btn">
+            <i class="fas fa-plus me-2"></i>Create Offer
+        </button>
+    </div>
+    <div class="card-body">
+        <div class="d-flex justify-content-between mb-4">
+            <div class="d-flex align-items-center">
+                <input type="text" class="form-control me-2" placeholder="Search offers..." >
+                <button class="btn btn-outline-primary">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Position</th>
+                        <th>Company</th>
+                        <th>Status</th>
+                        <th>Applications</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for job in jobs %}
+                    <tr>
+                        <td>{{ job.title }}</td>
+                        <td> {{ job.company}} </td>
+                        {% if job.is_active %}
+                        <td><span class="status-badge badge-active">Active</span></td>
+                        {% else %}
+                        <td><span class="status-badge badge-inactive">Inactive</span></td>
+                        {% endif %}
+                        <td>24</td>
+                        <td class="action-buttons">
+                            <button class="btn btn-sm btn-outline-primary me-1">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <button class="btn btn-sm btn-outline-danger ms-1" data-bs-toggle="modal" data-bs-target="#deleteOfferModal">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<!-- Candidate Management Section for later on  -->
+{% comment %} <div class="card mb-5" id="candidate-management">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Candidate Management</h4>
+        <button class="btn export-btn">
+            <i class="fas fa-file-excel me-2"></i>Export to Excel
+        </button>
+    </div>
+    <div class="card-body">
+        <div class="d-flex justify-content-between mb-4">
+            <div>
+                <label class="form-label me-2">Filter by Status:</label>
+                <select class="form-select d-inline-block" style="width: auto;">
+                    <option value="all">All Candidates</option>
+                    <option value="new">New</option>
+                    <option value="interview">Interviewing</option>
+                    <option value="hired">Hired</option>
+                    <option value="rejected">Rejected</option>
+                </select>
+            </div>
+            <div>
+                <input type="text" class="form-control" placeholder="Search candidates...">
+            </div>
+        </div>
+        
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Candidate</th>
+                        <th>Position</th>
+                        <th>Status</th>
+                        <th>Applied Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Robert Johnson</td>
+                        <td>Senior Frontend Developer</td>
+                        <td><span class="badge bg-primary">New</span></td>
+                        <td>2023-10-15</td>
+                        <td>
+                            <select class="form-select form-select-sm">
+                                <option>New</option>
+                                <option>Interviewing</option>
+                                <option>Hired</option>
+                                <option>Rejected</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Maria Garcia</td>
+                        <td>Data Scientist</td>
+                        <td><span class="badge bg-info">Interviewing</span></td>
+                        <td>2023-10-12</td>
+                        <td>
+                            <select class="form-select form-select-sm">
+                                <option>New</option>
+                                <option selected>Interviewing</option>
+                                <option>Hired</option>
+                                <option>Rejected</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>David Smith</td>
+                        <td>DevOps Engineer</td>
+                        <td><span class="badge bg-success">Hired</span></td>
+                        <td>2023-10-05</td>
+                        <td>
+                            <select class="form-select form-select-sm">
+                                <option>New</option>
+                                <option>Interviewing</option>
+                                <option selected>Hired</option>
+                                <option>Rejected</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Sarah Williams</td>
+                        <td>UX/UI Designer</td>
+                        <td><span class="badge bg-danger">Rejected</span></td>
+                        <td>2023-10-10</td>
+                        <td>
+                            <select class="form-select form-select-sm">
+                                <option>New</option>
+                                <option>Interviewing</option>
+                                <option>Hired</option>
+                                <option selected>Rejected</option>
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div> {% endcomment %}
+
+<!-- Site Content Management Section -->
+<div class="card mb-5" id="site-content">
+    <div class="card-header">
+        <h4 class="mb-0">Site Content Management</h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <!-- Testimonials Card -->
+            <div class="col-12">
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Testimonials</h5>
+                        <button class="btn btn-sm btn-primary">
+                            <i class="fas fa-plus me-1"></i>Add Testimonial
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="testimonial-grid">
+                            {% for test in testimonials %}
+                            <div class="testimonial-card">
+                                <div class="testimonial-img-container">
+                                    <img src="{{ test.image.url }}" class="testimonial-img" alt="{{test.name}}">
+                                </div>
+                                <div class="testimonial-body">
+                                    <h6 class="testimonial-name">{{test.name}}</h6>
+                                    <p class="testimonial-title">{{ test.title }}</p>
+                                    <p class="testimonial-text">"{{ test.comment }}"</p>
+                                </div>
+                                <div class="testimonial-actions">
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteTestimonialModal">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>  
+
+<!-- Modals -->
+<!-- Add Recruiter Modal -->
+<div class="modal fade" id="addRecruiterModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add New Recruiter</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Recruiter Type</label>
+                        <div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="type" id="headRecruiter" value="head">
+                                <label class="form-check-label" for="headRecruiter">Head Recruiter</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="type" id="regularRecruiter" value="regular" checked>
+                                <label class="form-check-label" for="regularRecruiter">Recruiter</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Create Recruiter</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modals -->
+<div class="modal fade" id="deleteRecruiterModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this recruiter? This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteRecruiter">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteOfferModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this job offer? This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteOffer">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteTestimonialModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this testimonial? This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteTestimonial">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteTeamModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this team member? This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteTeam">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+        
+        // Initialize toast
+        var toastEl = document.getElementById('successToast')
+        var toast = new bootstrap.Toast(toastEl, {
+            autohide: true,
+            delay: 3000
+        })
+        
+        // Toast demo
+        document.getElementById('confirmDeleteRecruiter').addEventListener('click', function() {
+            bootstrap.Modal.getInstance(document.getElementById('deleteRecruiterModal')).hide()
+            toast.show()
+        })
+        
+        document.getElementById('confirmDeleteOffer').addEventListener('click', function() {
+            bootstrap.Modal.getInstance(document.getElementById('deleteOfferModal')).hide()
+            toast.show()
+        })
+        
+        document.getElementById('confirmDeleteTestimonial').addEventListener('click', function() {
+            bootstrap.Modal.getInstance(document.getElementById('deleteTestimonialModal')).hide()
+            toast.show()
+        })
+        
+        document.getElementById('confirmDeleteTeam').addEventListener('click', function() {
+            bootstrap.Modal.getInstance(document.getElementById('deleteTeamModal')).hide()
+            toast.show()
+        })
+        
+        // Status change demo
+        const statusSelects = document.querySelectorAll('#candidate-management select')
+        statusSelects.forEach(select => {
+            select.addEventListener('change', function() {
+                const row = this.closest('tr')
+                const statusCell = row.querySelector('td:nth-child(3)')
+                
+                // Remove existing status classes
+                statusCell.querySelector('.badge').classList.remove(
+                    'bg-primary', 'bg-info', 'bg-success', 'bg-danger'
+                )
+                
+                // Apply new status class
+                if(this.value === 'new') {
+                    statusCell.querySelector('.badge').classList.add('bg-primary')
+                } else if(this.value === 'interview') {
+                    statusCell.querySelector('.badge').classList.add('bg-info')
+                } else if(this.value === 'hired') {
+                    statusCell.querySelector('.badge').classList.add('bg-success')
+                } else if(this.value === 'rejected') {
+                    statusCell.querySelector('.badge').classList.add('bg-danger')
+                }
+                
+                toast.show()
+            })
+        })
+    })
+</script>
+{% endblock %}
