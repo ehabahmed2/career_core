@@ -1,0 +1,454 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Recruiter Management | Career Core{% endblock %}
+
+{% block extra_css %}
+<style>
+    .recruiter-actions {
+        display: flex;
+        gap: 0.3rem;
+        flex-wrap: wrap;
+    }
+    
+    .action-btn {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.8rem;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+    
+    .btn-approve {
+        background-color: #28a745;
+        color: white;
+        border: none;
+    }
+    
+    .btn-promote {
+        background-color: #007bff;
+        color: white;
+        border: none;
+    }
+    
+    .btn-suspend {
+        background-color: #ffc107;
+        color: black;
+        border: none;
+    }
+    
+    .btn-delete {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+    }
+    
+    .view-all-link {
+        display: block;
+        text-align: center;
+        margin-top: 1rem;
+        color: var(--accent-gold);
+        font-weight: 600;
+    }
+    
+    .view-all-link:hover {
+        text-decoration: underline;
+    }
+    
+    .badge-head {
+        background-color: var(--primary-navy);
+        color: white;
+    }
+    
+    .recruiter-limit {
+        background-color: var(--light-gold);
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .recruiter-limit i {
+        color: var(--accent-gold);
+        margin-right: 0.5rem;
+    }
+
+
+
+    /* Dashboard-specific styles */
+    .card-header {
+        background-color: var(--primary-navy);
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    
+    .card-header .btn {
+        background-color: var(--accent-gold);
+        color: var(--primary-navy);
+        font-weight: 600;
+        margin-top: 0.5rem;
+    }
+    
+    .table-responsive {
+        border-radius: 0.25rem;
+        overflow: hidden;
+    }
+    
+    .table th {
+        background-color: var(--primary-navy);
+        color: white;
+        white-space: nowrap;
+    }
+    
+    .status-badge {
+        padding: 0.25em 0.6em;
+        border-radius: 10rem;
+        font-size: 85%;
+        font-weight: 600;
+        display: inline-block;
+    }
+    
+    .badge-approved { background-color: #28a745; color: white; }
+    .badge-pending { background-color: #ffc107; color: black; }
+    .badge-suspended { background-color: #dc3545; color: white; }
+    .badge-active { background-color: #28a745; color: white; }
+    .badge-inactive { background-color: #6c757d; color: white; }
+    
+    .action-buttons {
+        display: flex;
+        flex-wrap: nowrap;
+    }
+    
+    .action-buttons .btn {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        margin: 0 2px;
+    }
+    
+    .badge-admin {
+        background-color: var(--primary-navy);
+        color: white;
+        padding: 0.25em 0.6em;
+        border-radius: 10rem;
+        font-size: 85%;
+        font-weight: 600;
+        display: inline-block;
+    }
+    
+    .filter-section {
+        background-color: var(--light-gray);
+        padding: 1rem;
+        border-radius: 0.25rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    
+    
+    /* Responsive adjustments for mobile */
+    @media (max-width: 767px) {
+        .card-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        
+        .card-header h4,
+        .card-header h5 {
+            font-size: 1.1rem;
+        }
+        
+        .filter-section .row {
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .filter-section .col-md-4 {
+            width: 100%;
+            max-width: 100%;
+        }
+        
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            display: block;
+            width: 100%;
+        }
+        
+        .table {
+            width: 100%;
+            font-size: 0.85rem;
+        }
+        
+        .table th, 
+        .table td {
+            padding: 0.5rem;
+            min-width: 120px;
+        }
+        
+        .action-buttons {
+            flex-wrap: wrap;
+            gap: 3px;
+        }
+        
+        .action-buttons .btn {
+            padding: 0.2rem 0.4rem;
+            font-size: 0.75rem;
+        }
+        
+        .pagination {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+    
+        
+        .user-info {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+    }
+    
+    /* Adjustments for very small screens */
+    @media (max-width: 480px) {
+        .table th, 
+        .table td {
+            min-width: 100px;
+            font-size: 0.8rem;
+        }
+        
+    }
+
+    /* Additional styles for full management */
+    .full-management-header {
+        background: var(--primary-navy);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 0.25rem 0.25rem 0 0;
+    }
+    
+    .pagination-controls {
+        display: flex;
+        justify-content: center;
+        margin-top: 1.5rem;
+    }
+    
+    /* Add this for form buttons */
+    .recruiter-actions form {
+        display: inline-block;
+        margin-right: 0.3rem;
+    }
+    
+    /* Make form buttons look like your action buttons */
+    .recruiter-actions form button {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.8rem;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        border: none;
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-lg py-4 py-md-5">
+    <div class="card">
+        <div class="full-management-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2><i class="fas fa-users me-3"></i> Recruiter Management</h2>
+                <a href="{% url 'admin_dashboard' %}" class="btn" style="background-color: var(--accent-gold); color: var(--primary-navy);">
+                    <i class="fas fa-arrow-left me-2"></i> Back to Dashboard
+                </a>
+            </div>
+            <p class="mb-0 mt-2">Full management of all recruiters in the system</p>
+        </div>
+        
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="d-flex">
+                    <input type="text" class="form-control me-2" placeholder="Search recruiters..." id="search-recruiters">
+                    <button class="btn btn-outline-primary">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for recruiter in recruiters %}
+                    {% if not recruiter.is_superuser %}
+                    <tr data-status="{% if not recruiter.recruiter_profile.is_approved %}suspended{% elif recruiter.recruiter_profile.is_approved %}approved{% else %}pending{% endif %}" 
+                        data-type="{% if recruiter.recruiter_profile.is_head_recruiter %}head{% else %}regular{% endif %}">
+                        <td>
+                            <div class="d-flex align-items-center">
+                                {% if recruiter.photo %}
+                                <img src="{{ recruiter.photo.url }}" class="rounded-circle me-2" width="40" height="40" alt="{{ recruiter.full_name }}">
+                                {% else %}
+                                <div class="bg-secondary rounded-circle me-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                    <i class="fas fa-user text-white"></i>
+                                </div>
+                                {% endif %}
+                                {{ recruiter.full_name }}
+                            </div>
+                        </td>
+                        <td>{{ recruiter.email }}</td>
+                        <td>
+                            {% if recruiter.recruiter_profile.is_head_recruiter %}
+                            <span class="badge badge-head">Head Recruiter</span>
+                            {% else %}
+                            <span class="badge bg-secondary">Recruiter</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if not recruiter.recruiter_profile.is_approved %}
+                            <span class="status-badge badge-suspended">Suspended</span>
+                            {% elif recruiter.recruiter_profile.is_approved %}
+                            <span class="status-badge badge-approved">Approved</span>
+                            {% else %}
+                            <span class="status-badge badge-pending">Pending</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="recruiter-actions">
+                                <!-- Approve Button -->
+                                {% if not recruiter.recruiter_profile.is_approved %}
+                                <form method="post" action="{% url 'recruiter_action' recruiter.id %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="approve">
+                                    <button type="submit" class="btn-approve">
+                                        <i class="fas fa-check"></i> Approve
+                                    </button>
+                                </form>
+                                {% endif %}
+                                
+                                <!-- Promote Button -->
+                                {% if recruiter.recruiter_profile.is_approved and not recruiter.recruiter_profile.is_head_recruiter %}
+                                <form method="post" action="{% url 'recruiter_action' recruiter.id %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="promote">
+                                    <button type="submit" class="btn-promote">
+                                        <i class="fas fa-star"></i> Promote
+                                    </button>
+                                </form>
+                                {% endif %}
+                                
+                                <!-- Suspend/Unsuspend Button -->
+                                <form method="post" action="{% url 'recruiter_action' recruiter.id %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="{% if not recruiter.recruiter_profile.is_approved %}unsuspend{% else %}suspend{% endif %}">
+                                    <button type="submit" class="btn-suspend">
+                                        <i class="fas {% if recruiter.recruiter_profile.is_approved %}fa-play{% else %}fa-pause{% endif %}"></i>
+                                        {% if recruiter.recruiter_profile.is_suspended %}Unsuspend{% else %}Suspend{% endif %}
+                                    </button>
+                                </form>
+                                
+                                <!-- Delete Button with Modal -->
+                                <button class="btn-delete" data-bs-toggle="modal" data-bs-target="#deleteModal{{ recruiter.id }}">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                                
+                                <!-- Delete Confirmation Modal -->
+                                <div class="modal fade" id="deleteModal{{ recruiter.id }}" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Confirm Deletion</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Are you sure you want to delete {{ recruiter.full_name }}? This cannot be undone.</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <form method="post" action="{% url 'recruiter_action' recruiter.id %}">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="action" value="delete">
+                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            <!-- Pagination -->
+            <div class="pagination-controls">
+                <nav>
+                    <ul class="pagination">
+                        {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1">&laquo; First</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                        </li>
+                        {% endif %}
+                        
+                        {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                        <li class="page-item active">
+                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                        </li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                        </li>
+                        {% endif %}
+                        {% endfor %}
+                        
+                        {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Simple search functionality
+    document.getElementById('search-recruiters').addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        const rows = document.querySelectorAll('tbody tr');
+        
+        rows.forEach(row => {
+            const name = row.querySelector('td:first-child').textContent.toLowerCase();
+            const email = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+            if (name.includes(searchTerm) || email.includes(searchTerm)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+</script>
+{% endblock %}

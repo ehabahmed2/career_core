@@ -24,19 +24,25 @@
                         Services
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">For Job Seekers</a></li>
-                        <li><a class="dropdown-item" href="#">For Employers</a></li>
+                        <li><a class="dropdown-item" href="{{job_listings}}">For Job Seekers</a></li>
+                        {% if user.is_authenticated %}
+                        <li><a class="dropdown-item" href="#">Dashboard</a></li>
+                        {% else %}
+                        <li><a class="dropdown-item" href="{% url "login" %}">For Employers</a></li>
+                        {% endif %}
                         <li><a class="dropdown-item" href="#">Career Coaching</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url "contact" %}">Contact</a>
                 </li>
+                {% if user.is_authenticated %}
                 <li class="nav-item ms-lg-2">
                     <a class="btn btn-outline-light" href="#">
-                        <i class="fas fa-user me-1"></i> Login
+                        <i class="fas fa-user me-1"></i> {{user.full_name}}
                     </a>
                 </li>
+                {% endif %}
             </ul>
         </div>
     </div>
