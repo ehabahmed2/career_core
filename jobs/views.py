@@ -3,6 +3,8 @@ from .forms import CreateJobForm
 from django.contrib import messages
 from .models import Job
 from django.http import HttpResponseForbidden
+from django.shortcuts import get_object_or_404
+
 # Create your views here.
 def job_listings(request):
     jobs = Job.objects.all()
@@ -35,3 +37,6 @@ def create_offer(request):
         form = CreateJobForm()
     return render(request, 'jobs/create_job.html', context={'form': form})
 
+def job_details(request, pk):
+    job = get_object_or_404(Job, id=pk)
+    return render(request, 'jobs/job_details.html', context={'job':job})

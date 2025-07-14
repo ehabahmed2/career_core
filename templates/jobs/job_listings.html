@@ -81,10 +81,22 @@
     
     /* Job Cards Grid */
     .jobs-grid {
-        flex: 1;
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 1.5rem;
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;            /* a little more gap */
+    }
+
+    /* Job‑card body: allow room for description text */
+    .job-card-body {
+    padding: 1.5rem;
+    font-size: 0.95rem;
+    color: #444;
+    }
+
+    .job-description {
+    margin-bottom: 1.5rem;
+    line-height: 1.4;
     }
     
     .job-card {
@@ -304,30 +316,6 @@
     <div class="jobs-container">
         <!-- Filter Sidebar -->
         <aside class="filter-sidebar">
-            <div class="filter-section">
-                <h3 class="filter-title">Companies</h3>
-                <div class="filter-option">
-                    <input type="checkbox" id="company-cx" class="company-filter" value="Contentrix">
-                    <label for="company-tp">Contentrix</label>
-                </div>
-                <div class="filter-option">
-                    <input type="checkbox" id="company-tp" class="company-filter" value="TP">
-                    <label for="company-tp">TP</label>
-                </div>
-                <div class="filter-option">
-                    <input type="checkbox" id="company-tele" class="company-filter" value="Telesales">
-                    <label for="company-tele">Telesales</label>
-                </div>
-                <div class="filter-option">
-                    <input type="checkbox" id="company-cs" class="company-filter" value="Customer Service">
-                    <label for="company-cs">Customer Service</label>
-                </div>
-                <div class="filter-option">
-                    <input type="checkbox" id="company-tech" class="company-filter" value="Technology">
-                    <label for="company-tech">Technology</label>
-                </div>
-                <a class="filter-reset" id="reset-companies">Reset</a>
-            </div>
             
             <div class="filter-section">
                 <h3 class="filter-title">Salary Range</h3>
@@ -378,34 +366,49 @@
                 <!-- Job cards will be loaded here via AJAX -->
                 {% for job in jobs %}
                 <div class="job-card">
-                    <div class="job-card-header">
-                        <h3 class="job-title">{{ job.title }}</h3>
-                        <p class="company-name">{{ job.company }}</p>
+                <div class="job-card-header">
+                    <h3 class="job-title">{{ job.title }}</h3>
+                    <p class="company-name">{{ job.company }}</p>
+                </div>
+                
+                <div class="job-card-body">
+                    <div class="company-logo-container">
+                    {% if job.logo %}
+                        <img src="{{ job.logo.url }}" class="company-logo" alt="{{ job.company }}">
+                    {% else %}
+                        <i class="fas fa-building fa-2x text-muted"></i>
+                    {% endif %}
                     </div>
                     
-                    <div class="job-card-body">
-                        <div class="job-details">
-                            <div class="job-detail">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>{{ job.location }}</span>
-                            </div>
-                            <div class="job-detail">
-                                <i class="fas fa-money-bill-wave"></i>
-                                <span>EGP {{ job.salary_min|floatformat:"0" }} - {{ job.salary_max|floatformat:"0" }}</span>
-                            </div>
-                            <div class="job-detail">
-                                <i class="fas fa-briefcase"></i>
-                                <span>{{ job.is_remote }}</span>
-                            </div>
-                        </div>
-                    </div>
+                    <p class="job-description">
+                    {{ job.description|truncatewords:30 }}
+                    </p>
                     
-                    <div class="job-card-footer">
-                        {% comment %} <a href="{% url 'job_detail' job.id %}" class="btn-view-details"> {% endcomment %}
-                            View Details <i class="fas fa-arrow-right ms-2"></i>
-                        </a>
+                    <div class="job-details">
+                    <div class="job-detail">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>{{ job.location }}</span>
+                    </div>
+                    <div class="job-detail">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span>EGP {{ job.price|floatformat:"0" }}</span>
+                    </div>
+                    {% if job.is_remote %}
+                    <div class="job-detail">
+                        <i class="fas fa-home"></i>
+                        <span>Remote</span>
+                    </div>
+                    {% endif %}
                     </div>
                 </div>
+  
+                <div class="job-card-footer">
+                    <a href="{% url 'job_details' job.id %}" class="btn-view-details">
+                    View Details <i class="fas fa-arrow-right ms-2"></i>
+                    </a>
+                </div>
+                </div>
+
                 {% empty %}
                 <div class="col-12 text-center py-5">
                     <i class="fas fa-briefcase fa-3x text-muted mb-3"></i>
@@ -558,14 +561,6 @@
         function initFiltersFromUrl() {
             const params = new URLSearchParams(window.location.search);
             
-            // Companies
-            if (params.has('companies')) {
-                const companies = params.get('companies').split(',');
-                companies.forEach(company => {
-                    $(`.company-filter[value="${company}"]`).prop('checked', true);
-                    currentFilters.companies.push(company);
-                });
-            }
             
             // Salary
             if (params.has('salary')) {

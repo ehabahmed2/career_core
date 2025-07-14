@@ -6,7 +6,7 @@ from django.forms.widgets import CheckboxInput
 class CreateJobForm(forms.ModelForm):
     class Meta:
         model = Job
-        fields = ['title', 'company', 'price', 'location', 'is_active', 'is_remote', 'description']
+        fields = ['title', 'company', 'price', 'location', 'is_active', 'is_remote', 'description', 'job_type', 'experience']
         widgets = {
             'is_active': forms.CheckboxInput(attrs={'id': 'id_is_active', 'name': 'is_active', 'type':'checkbox'}),
             'is_remote': forms.CheckboxInput(attrs={'id': 'id_is_remote'}),

@@ -1,0 +1,406 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} Job Offer Detail | Career Core{% endblock title %}
+{% block description %}  {{ job.title }} position at {{ job.company }}. {{ job.description|truncatechars:160 }}{% endblock %}
+
+{% block seo_extra %}
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="{{ job.title }} at {{ job.company }} | Career Core">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:title" content="{{ job.title }} at {{ job.company }} | Career Core">
+    <meta property="og:description" content="Apply for {{ job.title }} position at {{ job.company }} in {{ job.location }}. {{ job.description|truncatechars:160 }}">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ request.build_absolute_uri }}">
+    <meta property="twitter:title" content="{{ job.title }} at {{ job.company }} | Career Core">
+    <meta property="twitter:description" content="Apply for {{ job.title }} position at {{ job.company }} in {{ job.location }}. {{ job.description|truncatechars:160 }}">
+    <meta property="twitter:image" content="{% static 'img/job-og-image.jpg' %}">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+    "@context": "https://schema.org/",
+    "@type": "JobPosting",
+    "title": "{{ job.title }}",
+    "description": "{{ job.description|escapejs }}",
+    "hiringOrganization": {
+        "@type": "Organization",
+        "name": "{{ job.company }}",
+        "sameAs": "{{ request.build_absolute_uri }}"
+    },
+    "employmentType": "FULL_TIME",
+    "datePosted": "{{ job.created_at|date:'Y-m-d' }}",
+    "jobLocation": {
+        "@type": "Place",
+        "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "{{ job.location }}",
+        "addressRegion": "{{ job.location }}",
+        "addressCountry": "EG"
+        }
+    },
+    "baseSalary": {
+        "@type": "MonetaryAmount",
+        "currency": "EGP",
+        "value": {
+        "@type": "QuantitativeValue",
+        "value": {{ job.price }},
+        "unitText": "MONTH"
+        }
+    }
+    }
+    </script>
+{% endblock seo_extra %}
+
+{% block extra_css %}
+<style>
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    /* Header Styles */
+    .header {
+        background: linear-gradient(135deg, var(--primary-navy) 0%, #2c3e50 100%);
+        color: var(--white);
+        padding: 40px 0;
+        text-align: center;
+        margin-bottom: 40px;
+        box-shadow: var(--shadow);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .header::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="0,0 100,100 0,100" fill="rgba(212, 175, 55, 0.1)"/></svg>');
+        background-size: cover;
+    }
+    
+    .job-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .company-name {
+        font-size: 1.5rem;
+        font-weight: 500;
+        opacity: 0.9;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .company-logo {
+        width: 100px;
+        height: 100px;
+        background: var(--white);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        box-shadow: var(--shadow);
+        position: relative;
+        z-index: 1;
+    }
+    
+    .company-logo i {
+        font-size: 2.5rem;
+        color: var(--primary-navy);
+    }
+    
+    /* Job Details */
+    .job-details {
+        display: flex;
+        gap: 30px;
+        margin-bottom: 40px;
+        flex-wrap: wrap;
+    }
+    
+    .job-main {
+        flex: 1;
+        min-width: 300px;
+        background: var(--white);
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: var(--shadow);
+    }
+    
+    
+    .section-title {
+        font-size: 1.5rem;
+        color: var(--primary-navy);
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--light-gold);
+        position: relative;
+    }
+    
+    .section-title::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 50px;
+        height: 2px;
+        background: var(--accent-gold);
+    }
+    
+    /* Job Info */
+    .job-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+    
+    .info-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    
+    .info-icon {
+        width: 40px;
+        height: 40px;
+        background: var(--light-gold);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--accent-gold);
+    }
+    
+    .info-content h4 {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--text-light);
+        margin-bottom: 3px;
+    }
+    
+    .info-content p {
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: var(--primary-navy);
+    }
+    
+    .remote-badge {
+        display: inline-block;
+        background: rgba(26, 43, 77, 0.1);
+        color: var(--primary-navy);
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        margin-top: 5px;
+    }
+    
+    /* Job Description - Fixed formatting */
+    .job-description {
+        margin-bottom: 30px;
+    }
+    
+    .description-content {
+        /* SOLUTION: Preserve formatting */
+        white-space: pre-wrap; /* Preserve spaces and line breaks */
+        line-height: 1.8;
+        color: var(--text-dark);
+        font-size: 1.05rem;
+    }
+    
+    /* Apply Button */
+    .apply-container {
+        text-align: center;
+        padding: 30px;
+        background: var(--white);
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        margin-top: 20px;
+    }
+    
+    .btn-apply {
+        background: var(--accent-gold);
+        color: var(--primary-navy);
+        font-weight: 600;
+        font-size: 1.1rem;
+        padding: 15px 40px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .btn-apply:hover {
+        background: #c19b2c;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    
+    /* Breadcrumb */
+    .breadcrumb {
+        padding: 15px 0;
+        font-size: 0.9rem;
+        color: var(--text-light);
+        margin-bottom: 20px;
+    }
+    
+    .breadcrumb a {
+        color: var(--primary-navy);
+        text-decoration: none;
+        transition: all 0.3s;
+    }
+    
+    .breadcrumb a:hover {
+        color: var(--accent-gold);
+        text-decoration: underline;
+    }
+    
+    .breadcrumb span {
+        margin: 0 8px;
+        color: var(--text-light);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .job-details {
+            flex-direction: column;
+        }
+        
+        .job-sidebar {
+            width: 100%;
+        }
+        
+        .job-title {
+            font-size: 2rem;
+        }
+        
+        .company-name {
+            font-size: 1.2rem;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .job-info {
+            grid-template-columns: 1fr;
+        }
+        
+        .job-title {
+            font-size: 1.8rem;
+        }
+        
+        .breadcrumb {
+            font-size: 0.8rem;
+        }
+    }
+</style>
+{% endblock extra_css %}
+
+{% block content %}
+    <!-- Breadcrumb -->
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="{% url 'home' %}">Home</a> 
+            <span>/</span>
+            <a href="{% url 'job_listings' %}">Job Listings</a> 
+            <span>/</span>
+            <span>{{ job.title }}</span>
+        </div>
+    </div>
+
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <div class="company-logo">
+                <i class="fas fa-building"></i>
+            </div>
+            <h1 class="job-title">{{ job.title }}</h1>
+            <p class="company-name">{{ job.company }}</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="job-details">
+            <!-- Main Content -->
+            <div class="job-main">
+                <!-- Job Info -->
+                <div class="job-info">
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="info-content">
+                            <h4>Location</h4>
+                            {% if job.is_remote %}
+                            <span class="remote-badge"><i class="fas fa-wifi"></i> Remote Position</span>
+                            {% else %}
+                            <p>{{ job.location }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <div class="info-content">
+                            <h4>Salary</h4>
+                            <p>EGP {{ job.price|floatformat:"0" }}/month</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="info-content">
+                            <h4>Job Type</h4>
+                            <p>{{ job.job_type }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div class="info-content">
+                            <h4>Posted</h4>
+                            <p>{{ job.created_at|date:"M d, Y" }}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Job Description - Fixed with formatting -->
+                <div class="job-description">
+                    <h2 class="section-title">Job Description</h2>
+                    <div class="description-content">{{ job.description }}</div>
+                </div>
+                
+            </div>
+        
+        </div>
+        
+        <!-- Apply Section -->
+        <div class="apply-container">
+            <button class="btn-apply">
+                <i class="fas fa-paper-plane"></i> Apply Now
+            </button>
+        </div>
+    </div>
+{% endblock %}

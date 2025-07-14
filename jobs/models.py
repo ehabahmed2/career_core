@@ -12,6 +12,8 @@ class Job(models.Model):
     is_remote = models.BooleanField(default=False)
     price = models.PositiveBigIntegerField()
     company = models.CharField(max_length=255)
+    job_type = models.CharField(max_length=155, default='Full-time')
+    experience = models.CharField(max_length=155, default='N/A')
     
     class Meta:
         verbose_name = 'Job'
