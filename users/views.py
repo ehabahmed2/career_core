@@ -20,8 +20,15 @@ User = get_user_model()
 # get current user
 @login_required
 def admin_dash(request):
-    if not (request.user.is_admin or request.user.is_superuser):
+    user = request.user
+    # Safe check for permissions
+    is_head_recruiter = False
+    if hasattr(user, 'recruiter_profile'):
+        is_head_recruiter = user.recruiter_profile.is_head_recruiter
+
+    if not (user.is_admin or user.is_superuser or is_head_recruiter):
         return HttpResponseForbidden("You don't have permission to access this page")
+    
     # Get recruiters with their users and related data
     recruiters = BaseUser.objects.filter(role=BaseUser.Role.RECRUITER).select_related('recruiter_profile')
     # get available offers
@@ -165,3 +172,5 @@ def recruiter_action(request, recruiter_id):
 
 
     return redirect('all_recruiters')
+
+

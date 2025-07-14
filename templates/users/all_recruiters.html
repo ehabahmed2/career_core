@@ -320,7 +320,6 @@
                             {% elif recruiter.recruiter_profile.is_approved %}
                             <span class="status-badge badge-approved">Approved</span>
                             {% else %}
-                            <span class="status-badge badge-pending">Pending</span>
                             {% endif %}
                         </td>
                         <td>
@@ -348,14 +347,16 @@
                                 {% endif %}
                                 
                                 <!-- Suspend/Unsuspend Button -->
+                                {% if recruiter.recruiter_profile.is_approved %}
                                 <form method="post" action="{% url 'recruiter_action' recruiter.id %}">
                                     {% csrf_token %}
-                                    <input type="hidden" name="action" value="{% if not recruiter.recruiter_profile.is_approved %}unsuspend{% else %}suspend{% endif %}">
+                                    <input type="hidden" name="action" value="{% if recruiter.recruiter_profile.is_approved %}suspend{% endif %}">
                                     <button type="submit" class="btn-suspend">
                                         <i class="fas {% if recruiter.recruiter_profile.is_approved %}fa-play{% else %}fa-pause{% endif %}"></i>
-                                        {% if recruiter.recruiter_profile.is_suspended %}Unsuspend{% else %}Suspend{% endif %}
+                                        Suspend
                                     </button>
                                 </form>
+                                {% endif %}
                                 
                                 <!-- Delete Button with Modal -->
                                 <button class="btn-delete" data-bs-toggle="modal" data-bs-target="#deleteModal{{ recruiter.id }}">
