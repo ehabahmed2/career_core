@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
+from .models import BaseUser, RecruiterProfile, AdminProfile
 
 
 class LoginForm(forms.Form):
@@ -101,4 +102,40 @@ class RegisterForm(UserCreationForm):
             user.save()
         return user
 
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = BaseUser
+        fields = ['full_name', 'username', 'phone', 'address', 'photo', 'email']
+        widgets = {
+            'photo': forms.FileInput(attrs={'accept': 'image/*'}),
+            'address': forms.Textarea(attrs={'rows': 3}),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Add Bootstrap classes to form fields
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control',
+            })
+        self.fields['photo'].widget.attrs.update({
+            'class': 'form-control',
+        })
 
+
+
+class AdminProfileForm(forms.ModelForm):
+    class Meta:
+        model = AdminProfile
+        fields = ['department']
+        widgets = {
+            'department': forms.TextInput(attrs={'placeholder': 'Your department'}),
+        }
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Add Bootstrap classes to form fields
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control',
+            })

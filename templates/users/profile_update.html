@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Update Profile | Career Core{% endblock %}
+
+{% block extra_css %}
+<style>
+
+
+
+
+    .profile-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+    }
+    
+    .profile-header {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #eaeaea;
+    }
+    
+    .profile-picture {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid var(--primary-navy);
+        margin: 0 auto 1rem;
+        display: block;
+    }
+    
+    .profile-card {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    .profile-card h3 {
+        color: var(--primary-navy);
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--accent-gold);
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-label {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--primary-navy);
+    }
+    
+    .current-photo-label {
+        display: block;
+        text-align: center;
+        margin-top: 1rem;
+        font-weight: 600;
+        color: var(--primary-navy);
+    }
+    
+    .btn-save {
+        background-color: var(--primary-navy);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        border-radius: 5px;
+        transition: all 0.3s;
+        display: block;
+        width: 100%;
+        max-width: 300px;
+        margin: 2rem auto 0;
+    }
+    
+    .btn-save:hover {
+        background-color: var(--accent-gold);
+        color: var(--primary-navy);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .role-badge {
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        margin-top: 0.5rem;
+        display: inline-block;
+    }
+    
+    .badge-recruiter {
+        background-color: var(--primary-navy);
+        color: white;
+    }
+    
+    .badge-admin {
+        background-color: var(--accent-gold);
+        color: var(--primary-navy);
+    }
+    
+    @media (max-width: 768px) {
+        .profile-container {
+            padding: 1rem;
+        }
+        
+        .profile-card {
+            padding: 1.5rem;
+        }
+        
+        .profile-picture {
+            width: 120px;
+            height: 120px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-header">
+        <h1>Update Your Profile</h1>
+        
+        {% if user.photo %}
+        <img src="{{ user.photo.url }}" alt="{{ user.full_name }}" class="profile-picture">
+        {% else %}
+        <div class="profile-picture bg-light d-flex align-items-center justify-content-center">
+            <i class="fas fa-user fa-3x text-muted"></i>
+        </div>
+        {% endif %}
+        
+        <h2>{{ user.full_name }}</h2>
+        
+        {% if user.is_recruiter and not user.recruiter_profile.is_head_recruiter %}
+        <span class="role-badge badge-recruiter">
+            <i class="fas fa-briefcase me-1"></i> Recruiter
+        </span>
+        {% elif user.recruiter_profile.is_head_recruiter %}
+        <span class="role-badge badge-admin">
+            <i class="fas fa-user-shield me-1"></i> Head Recruiter
+        </span>
+        {% elif user.is_admin %}
+        <span class="role-badge badge-admin">
+            <i class="fas fa-user-shield me-1"></i> Administrator
+        </span>
+        {% endif %}
+    </div>
+    
+    <div class="profile-card">
+        <h3><i class="fas fa-user-circle me-2"></i> Personal Information</h3>
+        
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+        <!-- Display all form errors at the top -->
+        {% if form.errors or profile_form.errors %}
+        <div class="alert alert-danger">
+            <h5 class="alert-heading"><i class="fas fa-exclamation-triangle me-2"></i> Please correct the following errors:</h5>
+            <ul class="mb-0">
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+                
+                {% if form.non_field_errors %}
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                {% endif %}
+                
+                {% if profile_form %}
+                    {% for field in profile_form %}
+                        {% for error in field.errors %}
+                            <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    
+                    {% if profile_form.non_field_errors %}
+                        {% for error in profile_form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endif %}
+                {% endif %}
+            </ul>
+        </div>
+        {% endif %}
+
+
+
+
+
+
+            <div class="form-group">
+                <label class="form-label">Full Name</label>
+                {{ form.full_name }}
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-label">Username</label>
+                        {{ form.username }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        {{ form.email }}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-label">Phone</label>
+                        {{ form.phone }}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="form-label">Profile Photo</label>
+                        {{ form.photo }}
+                        <span class="current-photo-label">
+                            {% if user.photo %}
+                            Current: <a href="{{ user.photo.url }}" target="_blank">{{ user.photo.name|slice:"15:" }}</a>
+                            {% else %}
+                            No photo selected
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Address</label>
+                {{ form.address }}
+            </div>
+            
+            {% if profile_form %}
+            <h3 class="mt-5"><i class="fas fa-id-card me-2"></i> Professional Information</h3>
+            
+            {% for field in profile_form %}
+            <div class="form-group">
+                <label class="form-label">{{ field.label }}</label>
+                {{ field }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            
+            <button type="submit" class="btn btn-save">
+                <i class="fas fa-save me-2"></i> Save Changes
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -251,22 +251,32 @@
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
 
-                <!-- Styled Form Errors -->
+                <!-- Global form errors -->
                 {% if form.errors %}
-                    <div class="alert alert-danger mt-3">
-                        <h6 class="alert-heading">
-                            <i class="fas fa-exclamation-triangle me-2"></i>
-                            حدث الأخطاء التالية:
-                        </h6>
-                        <ul class="mb-0 ps-3">
-                            {% for field, errors in form.errors.items %}
-                                {% for error in errors %}
-                                    <li>{{ error }}</li>
-                                {% endfor %}
-                            {% endfor %}
-                        </ul>
-                    </div>
+                <div class="alert alert-danger mt-3">
+                    <h6 class="alert-heading">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Please fix the following errors:
+                    </h6>
+                    <ul class="mb-0 ps-3">
+                    {# non‑field errors first #}
+                    {% for err in form.non_field_errors %}
+                        <li>{{ err }}</li>
+                    {% endfor %}
+
+                    {# then field errors #}
+                    {% for field, errors in form.errors.items %}
+                        {# skip non‑field_errors since we did them above #}
+                        {% if field != '__all__' %}
+                        {% for error in errors %}
+                            <li><strong>{{ form[field].label }}:</strong> {{ error }}</li>
+                        {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                    </ul>
+                </div>
                 {% endif %}
+
                 
                 <!-- Personal Information Section -->
                 <div class="form-section">

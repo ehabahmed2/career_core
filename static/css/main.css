@@ -342,3 +342,35 @@ a:hover {
 }
 
 }
+
+
+
+    .alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 0.25rem;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    }
+
+    .alert-danger h5 {
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .alert-danger ul {
+        margin-bottom: 0;
+        padding-left: 1.5rem;
+    }
+
+    .alert-danger li {
+        margin-bottom: 0.25rem;
+    }
+
+    .alert-danger li:last-child {
+        margin-bottom: 0;
+    }
+

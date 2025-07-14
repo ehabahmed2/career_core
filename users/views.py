@@ -4,11 +4,11 @@ from django.contrib.auth import login, logout, authenticate, get_user_model
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 
-from .models import BaseUser, RecruiterProfile
+from .models import BaseUser, RecruiterProfile, AdminProfile
 from jobs.models import Job
 from django.http import HttpResponseForbidden
 from testimonials.models import Tmonials
-from .forms import LoginForm, RegisterForm
+from .forms import LoginForm, RegisterForm, UserUpdateForm
 import secrets
 from django.core.cache import cache 
 from django.views.decorators.http import require_POST
@@ -82,7 +82,7 @@ def register(request):
         return redirect('home')
     else:
         if request.method == 'POST':
-            form = RegisterForm(request.POST)
+            form = RegisterForm(request.POST, request.FILES)
             # if form is valid then save it to db
             if form.is_valid():
                 user = form.save()
@@ -127,9 +127,6 @@ def all_recruiters(request):
         recruiters = BaseUser.objects.filter(role=BaseUser.Role.RECRUITER).select_related('recruiter_profile')
 
     return render(request, 'users/all_recruiters.html', context={'recruiters': recruiters})
-
-
-
 
 
 @require_POST
@@ -178,4 +175,26 @@ def recruiter_action(request, recruiter_id):
 
     return redirect('all_recruiters')
 
+# user's profile
+@login_required
+def profile(request):
+    return render(request, 'users/profile.html', {'user': request.user})
 
+#update user's profile
+@login_required
+def update_profile(request):
+    user = request.user
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST, request.FILES, instance=user)
+        if request.user.is_admin:
+            form = AdminProfile(request.POST, instance=user.admin_profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Details updated!')
+            return redirect('profile')
+        else:
+            messages.error(request, 'Something wrong with the details entered!')
+        
+    else:
+        form = UserUpdateForm(instance=user)
+    return render(request, 'users/profile_update.html', context={'form':form})

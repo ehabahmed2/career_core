@@ -1,0 +1,263 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ user.full_name }}'s Profile | Career Core{% endblock %}
+
+{% block extra_css %}
+<style>
+    .profile-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+    }
+    
+    .profile-header {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #eaeaea;
+    }
+    
+    .profile-picture {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid var(--primary-navy);
+        margin: 0 auto 1rem;
+        display: block;
+    }
+    
+    .profile-card {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    .profile-section {
+        margin-bottom: 2rem;
+    }
+    
+    .profile-section h3 {
+        color: var(--primary-navy);
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--accent-gold);
+    }
+    
+    .profile-detail {
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .detail-label {
+        font-weight: 600;
+        color: var(--primary-navy);
+        margin-bottom: 0.25rem;
+    }
+    
+    .detail-value {
+        color: #555;
+    }
+    
+    .role-badge {
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        margin-top: 0.5rem;
+        display: inline-block;
+    }
+    
+    .badge-recruiter {
+        background-color: var(--primary-navy);
+        color: white;
+    }
+    
+    .badge-admin {
+        background-color: var(--accent-gold);
+        color: var(--primary-navy);
+    }
+    
+    .empty-value {
+        color: #999;
+        font-style: italic;
+    }
+    
+    @media (max-width: 768px) {
+        .profile-container {
+            padding: 1rem;
+        }
+        
+        .profile-card {
+            padding: 1.5rem;
+        }
+        
+        .profile-picture {
+            width: 120px;
+            height: 120px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-header">
+        {% if user.photo %}
+        <img src="{{ user.photo.url }}" alt="{{ user.full_name }}" class="profile-picture">
+        {% else %}
+        <div class="profile-picture bg-light d-flex align-items-center justify-content-center">
+            <i class="fas fa-user fa-3x text-muted"></i>
+        </div>
+        {% endif %}
+        
+        <h1>{{ user.full_name }}</h1>
+        
+        {% if user.is_recruiter %}
+        <span class="role-badge badge-recruiter">
+            <i class="fas fa-briefcase me-1"></i> 
+            {% if user.recruiter_profile.is_head_recruiter %}
+            Head Recruiter
+            {% else %}
+            Recruiter
+            {% endif %}
+        </span>
+        {% elif user.is_admin %}
+        <span class="role-badge badge-admin">
+            <i class="fas fa-user-shield me-1"></i> Administrator
+        </span>
+        {% endif %}
+    </div>
+    
+    <div class="profile-card">
+        <div class="profile-section">
+            <h3><i class="fas fa-user-circle me-2"></i> Personal Information</h3>
+            
+            <div class="profile-detail">
+                <div class="detail-label">Full Name</div>
+                <div class="detail-value">{{ user.full_name }}</div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="profile-detail">
+                        <div class="detail-label">Username</div>
+                        <div class="detail-value">{{ user.username }}</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="profile-detail">
+                        <div class="detail-label">Email</div>
+                        <div class="detail-value">{{ user.email }}</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="profile-detail">
+                        <div class="detail-label">Phone</div>
+                        <div class="detail-value">
+                            {% if user.phone %}
+                            {{ user.phone }}
+                            {% else %}
+                            <span class="empty-value">Not provided</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="profile-detail">
+                        <div class="detail-label">Member Since</div>
+                        <div class="detail-value">{{ user.created_at|date:"F j, Y" }}</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="profile-detail">
+                <div class="detail-label">Address</div>
+                <div class="detail-value">
+                    {% if user.address %}
+                    {{ user.address|linebreaks }}
+                    {% else %}
+                    <span class="empty-value">Not provided</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        {% if user.is_admin and user.admin_profile %}
+        <div class="profile-section">
+            <h3><i class="fas fa-id-card me-2"></i> Admin Information</h3>
+            
+            <div class="profile-detail">
+                <div class="detail-label">Department</div>
+                <div class="detail-value">
+                    {% if user.admin_profile.department %}
+                    {{ user.admin_profile.department }}
+                    {% else %}
+                    <span class="empty-value">Not specified</span>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="profile-detail">
+                <div class="detail-label">Approver Status</div>
+                <div class="detail-value">
+                    {% if user.admin_profile.is_approver %}
+                    <span class="text-success"><i class="fas fa-check-circle"></i> Approver</span>
+                    {% else %}
+                    <span class="text-secondary">Regular Admin</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        {% if user.is_recruiter and user.recruiter_profile %}
+        <div class="profile-section">
+            <h3><i class="fas fa-briefcase me-2"></i> Recruiter Status</h3>
+            
+            <div class="profile-detail">
+                <div class="detail-label">Approval Status</div>
+                <div class="detail-value">
+                    {% if user.recruiter_profile.is_approved %}
+                    <span class="text-success"><i class="fas fa-check-circle"></i> Approved</span>
+                    {% else %}
+                    <span class="text-warning"><i class="fas fa-clock"></i> Pending Approval</span>
+                    {% endif %}
+                </div>
+            </div>
+            
+            {% if user.recruiter_profile.is_approved %}
+            <div class="profile-detail">
+                <div class="detail-label">Account Status</div>
+                <div class="detail-value">
+                    {% if user.recruiter_profile.is_suspended %}
+                    <span class="text-danger"><i class="fas fa-pause-circle"></i> Suspended</span>
+                    {% else %}
+                    <span class="text-success"><i class="fas fa-check-circle"></i> Active</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+            {% if user.recruiter_profile.is_head_recruiter %}
+            <div class="profile-detail">
+                <div class="detail-label">Account Recruiter Statsu</div>
+                <div class="detail-value">
+                    <span class="text-success"><i class="fas fa-check-circle"></i> Head Recruiter</span>
+                </div>
+            </div>
+            {% endif %}
+
+        </div>
+        {% endif %}
+        <a href='{% url "profile_update" %}' class="btn btn-save">
+                <i class="fas fa-save me-2"></i> Update details
+        </a>
+    </div>
+</div>
+{% endblock %}
