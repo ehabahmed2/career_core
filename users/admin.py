@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import AdminProfile, BaseUser, RecruiterProfile  # Add RecruiterProfile import
-from jobs.models import Job
+from jobs.models import Job, CandidateDetails
 from testimonials.models import Tmonials
 
 
@@ -19,3 +19,4 @@ class UserAdmin(admin.ModelAdmin):
 
 admin.site.register(Job)
 admin.site.register(Tmonials)
+admin.site.register(CandidateDetails)

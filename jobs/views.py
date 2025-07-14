@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
-from .forms import CreateJobForm
+from .forms import CreateJobForm, CandidateApplicationForm
 from django.contrib import messages
-from .models import Job
+from .models import Job, CandidateDetails
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 
@@ -40,3 +40,32 @@ def create_offer(request):
 def job_details(request, pk):
     job = get_object_or_404(Job, id=pk)
     return render(request, 'jobs/job_details.html', context={'job':job})
+
+
+def candidate_application(request, job_id):
+    job = get_object_or_404(Job, id=job_id)
+    if request.method == 'POST':
+        form = CandidateApplicationForm(request.POST)
+        if form.is_valid():
+            application = form.save(commit=False)
+            application.job = job  # Link to the job
+            application.save()
+            # Store in session that they completed the form
+            request.session['application_submitted'] = True
+
+            return redirect('success_application', job_id=job.id)
+        else:
+            messages.error(request, "Please correct the errors below")
+    else:
+        form = CandidateApplicationForm()
+    return render(request, 'jobs/candidate/candidate_form.html', context={'job':job, 'form':form})
+
+def application_success(request, job_id):
+    # Only allow access if they submitted the form
+    if not request.session.get('application_submitted'):
+        return redirect('job_listings')
+    
+    # Clear the session flag
+    request.session.pop('application_submitted', None)
+    job = Job.objects.get(id=job_id)
+    return render(request, 'jobs/candidate/success_application.html', {'job': job})

@@ -1,6 +1,6 @@
 from django import forms
-from .models import Job
-from django.forms.widgets import CheckboxInput
+from .models import Job,CandidateDetails
+from django.forms.widgets import CheckboxInput, TextInput, EmailInput
 
 
 class CreateJobForm(forms.ModelForm):
@@ -29,4 +29,34 @@ class CreateJobForm(forms.ModelForm):
             # force required on _every_ field
             if name != 'is_remote' and name == 'location':
                 field.required = True
-                
+
+
+
+class CandidateApplicationForm(forms.ModelForm):
+    class Meta:
+        model = CandidateDetails
+        fields = [
+            'full_name',
+            'whatsapp',
+            'email',
+            'education',
+            'age',
+            'location',
+            'other_language_1',
+            'other_language_2',
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for name, field in self.fields.items():
+            widget = field.widget
+            # Apply Bootstrap classes
+            if isinstance(widget, CheckboxInput):
+                widget.attrs.setdefault('class', 'form-check-input')
+            else:
+                widget.attrs.setdefault('class', 'form-control')
+
+            # Make all fields required except these two
+            if name not in ('other_language_1', 'other_language_2'):
+                field.required = True

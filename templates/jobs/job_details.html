@@ -398,9 +398,9 @@
         
         <!-- Apply Section -->
         <div class="apply-container">
-            <button class="btn-apply">
-                <i class="fas fa-paper-plane"></i> Apply Now
-            </button>
+            <a href="{% url 'candidate_application' job.id %}" class="btn-apply">
+                <i class="fas fa-paper-plane me-2"></i> Apply Now
+            </a>
         </div>
     </div>
 {% endblock %}

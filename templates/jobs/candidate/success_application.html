@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Application Submitted | Career Core{% endblock %}
+
+{% block extra_css %}
+<style>
+    .success-container {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: var(--white);
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        text-align: center;
+    }
+    
+    .success-icon {
+        width: 80px;
+        height: 80px;
+        background: var(--accent-gold);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        color: var(--primary-navy);
+        font-size: 2.5rem;
+    }
+    
+    .success-title {
+        color: var(--primary-navy);
+        margin-bottom: 15px;
+    }
+    
+    .success-message {
+        color: var(--text-dark);
+        margin-bottom: 30px;
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+    
+    .next-steps {
+        background: var(--light-gray);
+        border-radius: 10px;
+        padding: 20px;
+        margin: 30px 0;
+        text-align: left;
+    }
+    
+    .next-steps h3 {
+        color: var(--primary-navy);
+        margin-bottom: 15px;
+    }
+    
+    .next-steps ul {
+        padding-left: 20px;
+    }
+    
+    .next-steps li {
+        margin-bottom: 8px;
+    }
+    
+    .btn-return {
+        background: var(--primary-navy);
+        color: var(--white);
+        padding: 12px 30px;
+        border-radius: 6px;
+        display: inline-block;
+        margin-top: 20px;
+        transition: all 0.3s;
+    }
+    
+    .btn-return:hover {
+        background: #0d1f4a;
+        transform: translateY(-2px);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-lg py-4 py-md-5">
+    <div class="success-container">
+        <div class="success-icon">
+            <i class="fas fa-check"></i>
+        </div>
+        
+        <h1 class="success-title">Application Submitted Successfully!</h1>
+        
+        <p class="success-message">
+            Thank you for applying to <strong>{{ job.title }}</strong> at <strong>{{ job.company }}</strong>. 
+            We've received your application and will review it carefully.
+        </p>
+        
+        <div class="next-steps">
+            <h3>What Happens Next?</h3>
+            <ul>
+                <li>Our team will review your application within 3-5 business days</li>
+                <li>If your qualifications match our needs, we'll contact you via WhatsApp or email</li>
+                <li>Please ensure your contact information is correct and check your messages regularly</li>
+                <li>You'll receive a confirmation email with your application details</li>
+            </ul>
+        </div>
+        
+        <p>We appreciate your interest in joining our team!</p>
+        
+        <a href="{% url 'job_listings' %}" class="btn-return">
+            <i class="fas fa-arrow-left me-2"></i> Return to Job Listings
+        </a>
+    </div>
+</div>
+{% endblock %}
