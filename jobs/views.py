@@ -5,12 +5,12 @@ from .models import Job, CandidateDetails
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 
+from django.db.models import Q
+
 # Create your views here.
 def job_listings(request):
     jobs = Job.objects.all()
     return render(request, 'jobs/job_listings.html', context={'jobs':jobs   })
-
-
 
 
 def create_offer(request):
@@ -69,3 +69,32 @@ def application_success(request, job_id):
     request.session.pop('application_submitted', None)
     job = Job.objects.get(id=job_id)
     return render(request, 'jobs/candidate/success_application.html', {'job': job})
+
+
+def view_applications(request):
+    applications = CandidateDetails.objects.all().select_related('job')
+    all_jobs = Job.objects.all()
+    # Filtering
+    search_query = request.GET.get('search')
+    job_filter = request.GET.get('job')
+    status_filter = request.GET.get('status')
+    
+    if search_query:
+        applications = applications.filter(
+            Q(full_name__icontains=search_query) |
+            Q(email__icontains=search_query) |
+            Q(whatsapp__icontains=search_query)
+        )
+    if job_filter:
+        applications = applications.filter(job_id=job_filter)
+    
+    if status_filter:
+        applications = applications.filter(status=status_filter)
+    
+    context = {
+        'applications': applications,
+        'all_jobs': all_jobs,
+    }
+    
+    return render(request, 'jobs/candidate/candidate_apps.html', context)
+

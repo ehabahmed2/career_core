@@ -26,7 +26,7 @@
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="{% url "job_listings" %}">For Job Seekers</a></li>
                         {% if user.is_authenticated %}
-                        {% if user.recruiter_profile.is_head_recruiter and user.is_superuser %}
+                        {% if user.recruiter_profile.is_head_recruiter or user.is_superuser %}
                         <li><a class="dropdown-item" href="{% url "admin_dashboard" %}">Dashboard</a></li>
                         {% endif %}
                         {% else %}
