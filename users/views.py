@@ -69,6 +69,11 @@ def login_form(request):
             form = LoginForm()
     return render(request, 'users/login.html', context={'form': form})
 
+@login_required
+def logout_form(request):
+    logout(request)
+    messages.success(request, 'Logged out')
+    return redirect('home')
 
 # register user
 def register(request):
