@@ -139,3 +139,6 @@ class AdminProfileForm(forms.ModelForm):
             self.fields[field].widget.attrs.update({
                 'class': 'form-control',
             })
+
+
+

@@ -10,8 +10,8 @@ class Job(models.Model):
     is_active = models.BooleanField(default=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     is_remote = models.BooleanField(default=False)
-    price = models.PositiveBigIntegerField(default=0)
-    company = models.CharField(max_length=255, default='N/A')
+    price = models.PositiveBigIntegerField()
+    company = models.CharField(max_length=255)
     
     class Meta:
         verbose_name = 'Job'

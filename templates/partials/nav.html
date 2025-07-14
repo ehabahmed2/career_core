@@ -24,9 +24,11 @@
                         Services
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{{job_listings}}">For Job Seekers</a></li>
+                        <li><a class="dropdown-item" href="{% url "job_listings" %}">For Job Seekers</a></li>
                         {% if user.is_authenticated %}
-                        <li><a class="dropdown-item" href="#">Dashboard</a></li>
+                        {% if user.recruiter_profile.is_head_recruiter and user.is_superuser %}
+                        <li><a class="dropdown-item" href="{% url "admin_dashboard" %}">Dashboard</a></li>
+                        {% endif %}
                         {% else %}
                         <li><a class="dropdown-item" href="{% url "login" %}">For Employers</a></li>
                         {% endif %}
@@ -38,7 +40,7 @@
                 </li>
                 {% if user.is_authenticated %}
                 <li class="nav-item ms-lg-2">
-                    <a class="btn btn-outline-light" href="#">
+                    <a class="btn btn-outline-light" href="{% url "profile" %}">
                         <i class="fas fa-user me-1"></i> {{user.full_name}}
                     </a>
                 </li>
