@@ -20,65 +20,6 @@
         padding: 3rem 0;
     }
     
-    /* Filter Sidebar */
-    .filter-sidebar {
-        flex: 0 0 280px;
-        background: white;
-        border-radius: 8px;
-        padding: 1.5rem;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        height: fit-content;
-    }
-    
-    .filter-section {
-        margin-bottom: 2rem;
-        border-bottom: 1px solid #eee;
-        padding-bottom: 1.5rem;
-    }
-    
-    .filter-section:last-child {
-        border-bottom: none;
-    }
-    
-    .filter-title {
-        color: var(--primary-navy);
-        font-weight: 600;
-        margin-bottom: 1rem;
-        font-size: 1.1rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-    
-    .filter-option {
-        margin-bottom: 0.8rem;
-        display: flex;
-        align-items: center;
-    }
-    
-    .filter-option input {
-        margin-right: 0.8rem;
-    }
-    
-    .filter-option label {
-        color: var(--primary-navy);
-        cursor: pointer;
-        font-size: 0.95rem;
-    }
-    
-    .filter-option input:checked + label {
-        color: var(--accent-gold);
-        font-weight: 500;
-    }
-    
-    .filter-reset {
-        color: var(--primary-navy);
-        text-decoration: underline;
-        font-size: 0.9rem;
-        cursor: pointer;
-        display: inline-block;
-        margin-top: 0.5rem;
-    }
-    
     /* Job Cards Grid */
     .jobs-grid {
     flex: 1;
@@ -314,51 +255,6 @@
 <!-- Main Jobs Container -->
 <div class="container">
     <div class="jobs-container">
-        <!-- Filter Sidebar -->
-        <aside class="filter-sidebar">
-            
-            <div class="filter-section">
-                <h3 class="filter-title">Salary Range</h3>
-                <div class="filter-option">
-                    <input type="checkbox" id="salary-5" class="salary-filter" value="5000">
-                    <label for="salary-5">5,000 - 10,000 EGP</label>
-                </div>
-                <div class="filter-option">
-                    <input type="checkbox" id="salary-10" class="salary-filter" value="10000">
-                    <label for="salary-10">10,000 - 15,000 EGP</label>
-                </div>
-                <div class="filter-option">
-                    <input type="checkbox" id="salary-15" class="salary-filter" value="15000">
-                    <label for="salary-15">15,000+ EGP</label>
-                </div>
-                <a class="filter-reset" id="reset-salary">Reset</a>
-            </div>
-            
-            <div class="filter-section">
-                <h3 class="filter-title">Location</h3>
-                <div class="filter-option">
-                    <input type="checkbox" id="location-cairo" class="location-filter" value="Cairo">
-                    <label for="location-cairo">Cairo</label>
-                </div>
-                <div class="filter-option">
-                    <input type="checkbox" id="location-giza" class="location-filter" value="Giza">
-                    <label for="location-giza">Giza</label>
-                </div>
-                <div class="filter-option">
-                    <input type="checkbox" id="location-alex" class="location-filter" value="Alexandria">
-                    <label for="location-alex">Alexandria</label>
-                </div>
-                <div class="filter-option">
-                    <input type="checkbox" id="location-remote" class="location-filter" value="Remote">
-                    <label for="location-remote">Remote</label>
-                </div>
-                <a class="filter-reset" id="reset-location">Reset</a>
-            </div>
-            
-            <button id="apply-filters" class="btn btn-primary w-100" style="background-color: var(--primary-navy); border: none;">
-                Apply Filters
-            </button>
-        </aside>
         
         <!-- Jobs Grid -->
         <div class="jobs-content">
@@ -413,34 +309,10 @@
                 <div class="col-12 text-center py-5">
                     <i class="fas fa-briefcase fa-3x text-muted mb-3"></i>
                     <h3>No Jobs Found</h3>
-                    <p class="text-muted">Try adjusting your filters to see more results</p>
-                    <button class="btn btn-primary" id="reset-all-filters">Reset All Filters</button>
                 </div>
                 {% endfor %}
                 </div>
             
-            <!-- Pagination -->
-            <div class="pagination-container">
-                <ul class="pagination" id="pagination">
-                    <li class="page-item {% if not jobs.has_previous %}disabled{% endif %}">
-                        <a class="page-link" href="?page=1">&laquo;</a>
-                    </li>
-                    {% for num in jobs.paginator.page_range %}
-                        {% if num == jobs.number %}
-                            <li class="page-item active">
-                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
-                            </li>
-                        {% else %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-                    <li class="page-item {% if not jobs.has_next %}disabled{% endif %}">
-                        <a class="page-link" href="?page={{ jobs.paginator.num_pages }}">&raquo;</a>
-                    </li>
-                </ul>
-            </div>
         </div>
     </div>
 </div>
@@ -451,140 +323,6 @@
 </div>
 {% endblock %}
 
-{% block extra_js %}
-<script>
-    $(document).ready(function() {
-        // Initialize variables
-        let currentFilters = {
-            companies: [],
-            salary: [],
-            locations: []
-        };
-        
-        // Filter change handlers
-        $('.company-filter').change(function() {
-            const value = $(this).val();
-            if ($(this).is(':checked')) {
-                currentFilters.companies.push(value);
-            } else {
-                currentFilters.companies = currentFilters.companies.filter(item => item !== value);
-            }
-        });
-        
-        $('.salary-filter').change(function() {
-            const value = $(this).val();
-            if ($(this).is(':checked')) {
-                currentFilters.salary.push(value);
-            } else {
-                currentFilters.salary = currentFilters.salary.filter(item => item !== value);
-            }
-        });
-        
-        $('.location-filter').change(function() {
-            const value = $(this).val();
-            if ($(this).is(':checked')) {
-                currentFilters.locations.push(value);
-            } else {
-                currentFilters.locations = currentFilters.locations.filter(item => item !== value);
-            }
-        });
-        
-        // Reset buttons
-        $('#reset-companies').click(function() {
-            $('.company-filter').prop('checked', false);
-            currentFilters.companies = [];
-            applyFilters();
-        });
-        
-        $('#reset-salary').click(function() {
-            $('.salary-filter').prop('checked', false);
-            currentFilters.salary = [];
-            applyFilters();
-        });
-        
-        $('#reset-location').click(function() {
-            $('.location-filter').prop('checked', false);
-            currentFilters.locations = [];
-            applyFilters();
-        });
-        
-        // Apply filters button
-        $('#apply-filters').click(function() {
-            applyFilters();
-        });
-        
-        // AJAX filtering function
-        function applyFilters(page = 1) {
-            $('#loading-overlay').addClass('active');
-            
-            $.ajax({
-                url: window.location.pathname,
-                type: 'GET',
-                data: {
-                    companies: currentFilters.companies.join(','),
-                    salary: currentFilters.salary.join(','),
-                    locations: currentFilters.locations.join(','),
-                    page: page
-                },
-                success: function(data) {
-                    $('#jobs-grid').html($(data).find('#jobs-grid').html());
-                    $('#pagination').html($(data).find('#pagination').html());
-                    $('#loading-overlay').removeClass('active');
-                    
-                    // Update URL without reload
-                    const params = new URLSearchParams(window.location.search);
-                    params.set('page', page);
-                    if (currentFilters.companies.length) params.set('companies', currentFilters.companies.join(','));
-                    else params.delete('companies');
-                    if (currentFilters.salary.length) params.set('salary', currentFilters.salary.join(','));
-                    else params.delete('salary');
-                    if (currentFilters.locations.length) params.set('locations', currentFilters.locations.join(','));
-                    else params.delete('locations');
-                    
-                    history.pushState(null, '', '?' + params.toString());
-                },
-                error: function() {
-                    $('#loading-overlay').removeClass('active');
-                    alert('Error applying filters. Please try again.');
-                }
-            });
-        }
-        
-        // Pagination click handler
-        $(document).on('click', '.page-link', function(e) {
-            e.preventDefault();
-            const page = $(this).attr('href').split('page=')[1];
-            applyFilters(page);
-        });
-        
-        // Initialize filters from URL params
-        function initFiltersFromUrl() {
-            const params = new URLSearchParams(window.location.search);
-            
-            
-            // Salary
-            if (params.has('salary')) {
-                const salaries = params.get('salary').split(',');
-                salaries.forEach(salary => {
-                    $(`.salary-filter[value="${salary}"]`).prop('checked', true);
-                    currentFilters.salary.push(salary);
-                });
-            }
-            
-            // Locations
-            if (params.has('locations')) {
-                const locations = params.get('locations').split(',');
-                locations.forEach(location => {
-                    $(`.location-filter[value="${location}"]`).prop('checked', true);
-                    currentFilters.locations.push(location);
-                });
-            }
-        }
-        
-        initFiltersFromUrl();
-    });
-</script>
-{% endblock %}
 
 {% block seo_extra %}
     <script type="application/ld+json">

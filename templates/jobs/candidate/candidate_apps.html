@@ -24,8 +24,6 @@
     }
     
     
-
-    
     .table-responsive {
         overflow-x: auto;
         margin-bottom: 2rem;
@@ -75,28 +73,47 @@
         color: #155724;
     }
     
+    .status-rejected {
+        background: #f8d7da;
+        color: #721c24;
+    }
+    
     .action-btns {
         display: flex;
         gap: 0.5rem;
+        flex-wrap: wrap;
     }
     
-    .action-btn {
+    .status-btn {
         padding: 5px 10px;
         border-radius: 4px;
         font-size: 0.85rem;
         display: inline-flex;
         align-items: center;
         gap: 0.3rem;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s;
     }
     
-    .btn-view {
-        background: var(--primary-navy);
-        color: var(--white);
+    .status-btn:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
     }
     
-    .btn-download {
-        background: var(--accent-gold);
-        color: var(--primary-navy);
+    .btn-reviewed {
+        background: #0d6efd;
+        color: white;
+    }
+    
+    .btn-hired {
+        background: #198754;
+        color: white;
+    }
+    
+    .btn-rejected {
+        background: #dc3545;
+        color: white;
     }
     
     .search-filter {
@@ -117,6 +134,18 @@
         min-width: 200px;
     }
     
+    .btn-download {
+        background: var(--primary-navy);
+        color: var(--white);
+        padding: 5px 10px;
+        border-radius: 4px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        font-size: 0.85rem;
+    }
+    
     @media (max-width: 768px) {
         .page-header {
             flex-direction: column;
@@ -130,6 +159,16 @@
         
         .filter-group {
             width: 100%;
+        }
+        
+        .action-btns {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .status-btn {
+            width: 100%;
+            justify-content: center;
         }
     }
 </style>
@@ -170,6 +209,7 @@
                             <option value="pending" {% if request.GET.status == 'pending' %}selected{% endif %}>Pending</option>
                             <option value="reviewed" {% if request.GET.status == 'reviewed' %}selected{% endif %}>Reviewed</option>
                             <option value="hired" {% if request.GET.status == 'hired' %}selected{% endif %}>Hired</option>
+                            <option value="rejected" {% if request.GET.status == 'rejected' %}selected{% endif %}>Rejected</option>
                         </select>
                     </div>
                     
@@ -227,11 +267,21 @@
                             </span>
                         </td>
                         <td>
-                            <div class="action-btns">
-                                <a href="{% url 'all_applications'%}" class="action-btn btn-view">
-                                    <i class="fas fa-eye"></i> View
-                                </a>
-                            </div>
+                            <form method="post" action="{% url 'update_candidate_statu' application.id %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                                <div class="action-btns">
+                                    <button type="submit" name="status" value="reviewed" class="status-btn btn-reviewed">
+                                        <i class="fas fa-eye"></i> Review
+                                    </button>
+                                    <button type="submit" name="status" value="hired" class="status-btn btn-hired">
+                                        <i class="fas fa-check-circle"></i> Hire
+                                    </button>
+                                    <button type="submit" name="status" value="rejected" class="status-btn btn-rejected">
+                                        <i class="fas fa-times-circle"></i> Reject
+                                    </button>
+                                </div>
+                            </form>
                         </td>
                     </tr>
                     {% empty %}

@@ -98,3 +98,7 @@ def view_applications(request):
     
     return render(request, 'jobs/candidate/candidate_apps.html', context)
 
+def application_status_changer(request, pk):
+    application = get_object_or_404(CandidateDetails, id=pk)
+    return render('jobs/candidate/candidate_apps.html', context={})
+
