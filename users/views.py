@@ -259,3 +259,8 @@ def job_action(request, pk):
 
     return render(request, 'users/admins/admin_dash.html', context={})
 
+def tmonial_action(request, pk):
+    pass
+
+def edit_tmonial(request, pk):
+    pass

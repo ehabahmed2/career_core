@@ -5,25 +5,95 @@
 {% block description %}Read what our clients and candidates say about Career Core's recruitment services. Real success stories from our satisfied partners.{% endblock %}
 
 {% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
 <style>
-    /* Testimonials Page Styles */
-    .testimonials-hero {
-        background: linear-gradient(135deg, rgba(10, 36, 99, 0.9) 0%, rgba(10, 36, 99, 0.95) 100%), 
-                    url('{% static 'img/testimonials-bg.jpg' %}') center/cover;
-        padding: 6rem 0;
-        color: white;
-        text-align: center;
+    :root {
+        --primary-navy: #0a2463;
+        --accent-gold: #ffd700;
+        --light-gold: #fff9e6;
+        --transition-base: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
     
-    .testimonials-section {
+    /* Hero Section */
+    .testimonials-hero {
+        background: linear-gradient(135deg, rgba(10, 36, 99, 0.92) 0%, rgba(10, 36, 99, 0.96) 100%), 
+                    url('{% static 'img/testimonials-bg.jpg' %}') center/cover no-repeat;
+        padding: 8rem 0 6rem;
+        color: white;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .testimonials-hero::before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 100px;
+        background: linear-gradient(to bottom, transparent 0%, white 100%);
+        z-index: 1;
+    }
+    
+    .testimonials-hero .container {
+        position: relative;
+        z-index: 2;
+    }
+    
+    .testimonials-hero h1 {
+        font-size: 3.5rem;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        margin-bottom: 1.5rem;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .testimonials-hero .lead {
+        font-size: 1.4rem;
+        max-width: 700px;
+        margin: 0 auto 2rem;
+        opacity: 0.9;
+    }
+    
+    /* Testimonials Grid */
+    .testimonial-grid-container {
         padding: 5rem 0;
         background-color: #f9f9f9;
     }
     
-    .section-intro {
-        max-width: 800px;
-        margin: 0 auto 4rem;
+    .section-header {
         text-align: center;
+        margin-bottom: 4rem;
+    }
+    
+    .section-header h2 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--primary-navy);
+        margin-bottom: 1rem;
+        position: relative;
+        display: inline-block;
+    }
+    
+    .section-header h2::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        background: var(--accent-gold);
+        border-radius: 2px;
+    }
+    
+    .section-header p {
+        font-size: 1.2rem;
+        color: #666;
+        max-width: 700px;
+        margin: 0 auto;
     }
     
     .testimonial-grid {
@@ -34,19 +104,25 @@
     
     .testimonial-card {
         background: white;
-        border-radius: 10px;
+        border-radius: 12px;
         overflow: hidden;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        transition: var(--transition-base);
         position: relative;
         height: 100%;
         display: flex;
         flex-direction: column;
+        border: 1px solid rgba(0,0,0,0.05);
     }
     
     .testimonial-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+    }
+    
+    .testimonial-card.highlighted {
+        border: 2px solid var(--accent-gold);
+        box-shadow: 0 10px 25px rgba(255, 215, 0, 0.2);
     }
     
     .testimonial-content {
@@ -55,25 +131,26 @@
         position: relative;
     }
     
-    .testimonial-content:before {
+    .testimonial-content::before {
         content: """;
         position: absolute;
         top: 20px;
         left: 20px;
         font-family: Georgia, serif;
         font-size: 5rem;
-        color: var(--light-gold);
-        opacity: 0.3;
+        color: var(--accent-gold);
+        opacity: 0.15;
         line-height: 1;
     }
     
     .testimonial-text {
-        font-size: 1.05rem;
+        font-size: 1.1rem;
         line-height: 1.8;
         color: #444;
         margin-bottom: 1.5rem;
         position: relative;
         z-index: 2;
+        font-style: italic;
     }
     
     .testimonial-author {
@@ -88,7 +165,9 @@
         border-radius: 50%;
         overflow: hidden;
         margin-right: 1.5rem;
-        border: 3px solid var(--light-gold);
+        border: 3px solid var(--accent-gold);
+        flex-shrink: 0;
+        background: #f5f5f5;
     }
     
     .author-image img {
@@ -103,8 +182,9 @@
     
     .author-name {
         color: var(--primary-navy);
-        font-weight: 600;
+        font-weight: 700;
         margin-bottom: 0.2rem;
+        font-size: 1.1rem;
     }
     
     .author-position {
@@ -115,25 +195,55 @@
     
     .stars {
         color: var(--accent-gold);
+        font-size: 0.9rem;
     }
     
+    .testimonial-date {
+        position: absolute;
+        top: 0.5rem;
+        right: 1rem;
+        font-size: 0.8rem;
+        color: #999;
+    }
+    
+    /* Stats Section */
     .stats-section {
         background: linear-gradient(135deg, var(--primary-navy) 0%, #081b4d 100%);
-        padding: 4rem 0;
+        padding: 5rem 0;
         color: white;
         text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .stats-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('{% static 'img/dots-pattern.png' %}') center/cover;
+        opacity: 0.1;
     }
     
     .stat-container {
         padding: 1.5rem;
+        position: relative;
+        z-index: 2;
     }
     
     .stat-number {
         font-size: 3.5rem;
-        font-weight: 700;
+        font-weight: 800;
         color: var(--accent-gold);
         margin-bottom: 0.5rem;
         line-height: 1;
+        transition: var(--transition-base);
+    }
+    
+    .stat-container:hover .stat-number {
+        transform: scale(1.1);
     }
     
     .stat-label {
@@ -141,65 +251,192 @@
         text-transform: uppercase;
         letter-spacing: 1px;
         opacity: 0.9;
+        font-weight: 500;
     }
     
+    /* CTA Section */
     .cta-section {
         padding: 6rem 0;
         background: var(--light-gold);
         text-align: center;
+        position: relative;
+    }
+    
+    .cta-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('{% static 'img/gold-pattern.png' %}') center/cover;
+        opacity: 0.1;
     }
     
     .cta-content {
         max-width: 700px;
         margin: 0 auto;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .cta-content h2 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--primary-navy);
+        margin-bottom: 1.5rem;
+    }
+    
+    .cta-content .lead {
+        font-size: 1.2rem;
+        color: #555;
+        margin-bottom: 2rem;
     }
     
     .cta-button {
         background: var(--primary-navy);
         color: white;
-        padding: 1rem 2.5rem;
+        padding: 1rem 3rem;
         font-weight: 600;
         border-radius: 50px;
         text-transform: uppercase;
         letter-spacing: 1px;
-        border: none;
-        transition: all 0.3s ease;
+        border: 2px solid var(--primary-navy);
+        transition: var(--transition-base);
         display: inline-block;
-        margin-top: 2rem;
+        margin-top: 1rem;
+        font-size: 1rem;
     }
     
     .cta-button:hover {
-        background: var(--accent-gold);
+        background: transparent;
         color: var(--primary-navy);
         transform: translateY(-3px);
         box-shadow: 0 10px 20px rgba(0,0,0,0.1);
     }
     
+    /* Video Testimonial */
+    .video-testimonial {
+        padding: 5rem 0;
+        background: white;
+    }
+    
+    .video-container {
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        max-width: 900px;
+        margin: 0 auto;
+    }
+    
+    .video-container::before {
+        content: "";
+        display: block;
+        padding-top: 56.25%;
+    }
+    
+    .video-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+    
+    /* Testimonial Form */
+    .testimonial-form-section {
+        padding: 5rem 0;
+        background: #f5f7fa;
+    }
+    
+    .testimonial-form-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 12px;
+        padding: 3rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+    
     /* Responsive Adjustments */
+    @media (max-width: 1200px) {
+        .testimonials-hero h1 {
+            font-size: 3rem;
+        }
+    }
+    
     @media (max-width: 992px) {
         .testimonial-grid {
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 2rem;
         }
+        
+        .stat-number {
+            font-size: 3rem;
+        }
     }
     
     @media (max-width: 768px) {
         .testimonials-hero {
-            padding: 4rem 0;
+            padding: 6rem 0 4rem;
+        }
+        
+        .testimonials-hero h1 {
+            font-size: 2.5rem;
+        }
+        
+        .testimonials-hero .lead {
+            font-size: 1.2rem;
+        }
+        
+        .section-header h2 {
+            font-size: 2rem;
+        }
+        
+        .cta-content h2 {
+            font-size: 2rem;
+        }
+        
+        .testimonial-form-container {
+            padding: 2rem;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .testimonials-hero h1 {
+            font-size: 2rem;
         }
         
         .testimonial-grid {
             grid-template-columns: 1fr;
         }
         
-        .testimonial-card {
-            max-width: 500px;
-            margin: 0 auto;
+        .stat-number {
+            font-size: 2.5rem;
         }
         
-        .stat-number {
-            font-size: 3rem;
+        .testimonial-content {
+            padding: 1.5rem;
         }
+        
+        .testimonial-author {
+            padding: 0 1.5rem 1.5rem;
+        }
+    }
+    
+    /* Animation Classes */
+    .animate-delay-1 {
+        animation-delay: 0.2s;
+    }
+    
+    .animate-delay-2 {
+        animation-delay: 0.4s;
+    }
+    
+    .animate-delay-3 {
+        animation-delay: 0.6s;
     }
 </style>
 {% endblock %}
@@ -208,33 +445,45 @@
 <!-- Testimonials Hero Section -->
 <section class="testimonials-hero">
     <div class="container">
-        <h1 class="display-4 mb-3">Success Stories</h1>
-        <p class="lead">Hear from candidates and companies who have transformed their careers and businesses with Career Core</p>
+        <h1 class="animate__animated animate__fadeInDown">Success Stories</h1>
+        <p class="lead animate__animated animate__fadeIn animate__delay-1s">Hear from candidates and companies who have transformed their careers and businesses with Career Core</p>
+        <div class="mt-4 animate__animated animate__fadeIn animate__delay-2s">
+            <a href="#testimonials" class="btn btn-light btn-lg px-4 py-2 me-2">Read Testimonials</a>
+            <a href="#share-story" class="btn btn-outline-light btn-lg px-4 py-2">Share Your Story</a>
+        </div>
     </div>
 </section>
 
-<!-- Testimonials Section -->
-<section class="testimonials-section">
+<!-- Testimonials Grid Section -->
+<section id="testimonials" class="testimonial-grid-container">
     <div class="container">
-        <div class="section-intro">
-            <h2 class="mb-3">Trusted by Top Talent & Leading Companies</h2>
-            <p class="lead">Don't just take our word for it - here's what our clients and candidates have to say about their experience with Career Core</p>
-            <div class="divider"></div>
+        <div class="section-header animate__animated animate__fadeIn">
+            <h2>Trusted by Top Talent & Leading Companies</h2>
+            <p>Don't just take our word for it - here's what our community has to say</p>
         </div>
         
         <div class="testimonial-grid">
-            <!-- Testimonial 1 -->
-            <div class="testimonial-card">
+            {% for testimonial in testimonials %}
+            <div class="testimonial-card {% if forloop.counter <= 2 %}highlighted{% endif %} animate__animated animate__fadeInUp animate__delay-{{ forloop.counter|add:"1" }}s">
                 <div class="testimonial-content">
-                    <p class="testimonial-text">Career Core completely transformed our hiring process. They understood our company culture and found candidates that not only had the right skills but were the perfect cultural fit. We've hired 5 senior developers through them in just 3 months!</p>
+                    <span class="testimonial-date">{{ testimonial.created_at|date:"M d, Y" }}</span>
+                    <p class="testimonial-text">"{{ testimonial.comment }}"</p>
                 </div>
                 <div class="testimonial-author">
                     <div class="author-image">
-                        <img src="{% static 'img/testimonial1.jpg' %}" alt="Ahmed Hassan">
+                        {% if testimonial.image %}
+                        <img src="{{ testimonial.image.url }}" alt="{{ testimonial.name }}" loading="lazy">
+                        {% else %}
+                        <div class="d-flex align-items-center justify-content-center h-100 bg-light text-muted">
+                            <i class="fas fa-user fa-lg"></i>
+                        </div>
+                        {% endif %}
                     </div>
                     <div class="author-details">
-                        <h4 class="author-name">Ahmed Hassan</h4>
-                        <p class="author-position">CTO, TechInnovate Egypt</p>
+                        <div class="author-name">{{ testimonial.name }}</div>
+                        {% if testimonial.title %}
+                        <div class="author-position">{{ testimonial.title }}</div>
+                        {% endif %}
                         <div class="stars">
                             <i class="fas fa-star"></i>
                             <i class="fas fa-star"></i>
@@ -245,121 +494,16 @@
                     </div>
                 </div>
             </div>
-            
-            <!-- Testimonial 2 -->
-            <div class="testimonial-card">
-                <div class="testimonial-content">
-                    <p class="testimonial-text">After months of unsuccessful job searching, Career Core helped me land my dream role at an international company. Their recruiters provided invaluable coaching and preparation that made all the difference in my interviews.</p>
-                </div>
-                <div class="testimonial-author">
-                    <div class="author-image">
-                        <img src="{% static 'img/testimonial2.jpg' %}" alt="Nour Mahmoud">
-                    </div>
-                    <div class="author-details">
-                        <h4 class="author-name">Nour Mahmoud</h4>
-                        <p class="author-position">Senior Marketing Manager</p>
-                        <div class="stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                    </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <div class="bg-light rounded-4 p-5">
+                    <i class="fas fa-comments fa-3x text-muted mb-4"></i>
+                    <h3 class="mb-3">No Testimonials Yet</h3>
+                    <p class="text-muted mb-4">Be the first to share your experience with us!</p>
+                    <a href="#share-story" class="btn btn-primary px-4">Add Testimonial</a>
                 </div>
             </div>
-            
-            <!-- Testimonial 3 -->
-            <div class="testimonial-card">
-                <div class="testimonial-content">
-                    <p class="testimonial-text">The team at Career Core took the time to understand our very specific needs for a bilingual project manager. They presented us with three exceptional candidates, and we hired one within two weeks. Their service exceeded our expectations.</p>
-                </div>
-                <div class="testimonial-author">
-                    <div class="author-image">
-                        <img src="{% static 'img/testimonial3.jpg' %}" alt="Karim Farouk">
-                    </div>
-                    <div class="author-details">
-                        <h4 class="author-name">Karim Farouk</h4>
-                        <p class="author-position">HR Director, Global Solutions</p>
-                        <div class="stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Testimonial 4 -->
-            <div class="testimonial-card">
-                <div class="testimonial-content">
-                    <p class="testimonial-text">Career Core didn't just find me a job; they helped me build a career path. Their ongoing support and advice have been instrumental in my professional development over the past three years.</p>
-                </div>
-                <div class="testimonial-author">
-                    <div class="author-image">
-                        <img src="{% static 'img/testimonial4.jpg' %}" alt="Mariam Adel">
-                    </div>
-                    <div class="author-details">
-                        <h4 class="author-name">Mariam Adel</h4>
-                        <p class="author-position">Finance Director</p>
-                        <div class="stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Testimonial 5 -->
-            <div class="testimonial-card">
-                <div class="testimonial-content">
-                    <p class="testimonial-text">We've used several recruitment agencies in Cairo, but Career Core stands out for their professionalism and results. They've become our exclusive recruitment partner for all technical roles.</p>
-                </div>
-                <div class="testimonial-author">
-                    <div class="author-image">
-                        <img src="{% static 'img/testimonial5.jpg' %}" alt="Omar Sherif">
-                    </div>
-                    <div class="author-details">
-                        <h4 class="author-name">Omar Sherif</h4>
-                        <p class="author-position">CEO, Prime Technologies</p>
-                        <div class="stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Testimonial 6 -->
-            <div class="testimonial-card">
-                <div class="testimonial-content">
-                    <p class="testimonial-text">As an international company entering the Egyptian market, Career Core provided invaluable local expertise. They helped us navigate cultural differences and build an amazing local team in record time.</p>
-                </div>
-                <div class="testimonial-author">
-                    <div class="author-image">
-                        <img src="{% static 'img/testimonial6.jpg' %}" alt="Sarah Johnson">
-                    </div>
-                    <div class="author-details">
-                        <h4 class="author-name">Sarah Johnson</h4>
-                        <p class="author-position">Regional Director, Europe & MENA</p>
-                        <div class="stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 </section>
@@ -368,20 +512,20 @@
 <section class="stats-section">
     <div class="container">
         <div class="row">
-            <div class="col-md-3 stat-container">
-                <div class="stat-number">98%</div>
+            <div class="col-md-3 stat-container animate__animated animate__fadeIn">
+                <div class="stat-number" data-count="98">0</div>
                 <div class="stat-label">Client Satisfaction</div>
             </div>
-            <div class="col-md-3 stat-container">
-                <div class="stat-number">2,500+</div>
+            <div class="col-md-3 stat-container animate__animated animate__fadeIn animate-delay-1">
+                <div class="stat-number" data-count="2500">0</div>
                 <div class="stat-label">Candidates Placed</div>
             </div>
-            <div class="col-md-3 stat-container">
-                <div class="stat-number">95%</div>
+            <div class="col-md-3 stat-container animate__animated animate__fadeIn animate-delay-2">
+                <div class="stat-number" data-count="95">0</div>
                 <div class="stat-label">Retention Rate</div>
             </div>
-            <div class="col-md-3 stat-container">
-                <div class="stat-number">300+</div>
+            <div class="col-md-3 stat-container animate__animated animate__fadeIn animate-delay-3">
+                <div class="stat-number" data-count="50">0</div>
                 <div class="stat-label">Company Partners</div>
             </div>
         </div>
@@ -391,13 +535,160 @@
 <!-- CTA Section -->
 <section class="cta-section">
     <div class="container">
-        <div class="cta-content">
-            <h2 class="mb-4">Ready to Transform Your Career or Team?</h2>
+        <div class="cta-content animate__animated animate__zoomIn">
+            <h2>Ready to Transform Your Career or Team?</h2>
             <p class="lead">Join hundreds of satisfied clients and candidates who have experienced the Career Core difference</p>
-            <a href="{% url 'contact' %}" class="cta-button">Get Started Today</a>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="{% url 'contact' %}" class="cta-button">Get Started Today</a>
+            </div>
         </div>
     </div>
 </section>
+
+<!-- Testimonial Form Section -->
+<section id="share-story" class="testimonial-form-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Share Your Experience</h2>
+            <p>We value your feedback. Share your Career Core story with us</p>
+        </div>
+        <div class="testimonial-form-container">
+            <form id="testimonialForm" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row mb-4">
+                    <div class="col-md-6 mb-3 mb-md-0">
+                        <label for="name" class="form-label fw-bold">Your Name *</label>
+                        <input type="text" class="form-control form-control-lg" id="name" name="name" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="title" class="form-label fw-bold">Your Title/Position</label>
+                        <input type="text" class="form-control form-control-lg" id="title" name="title">
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="image" class="form-label fw-bold">Your Photo (Optional)</label>
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <div class="author-image" id="imagePreview">
+                                <div class="d-flex align-items-center justify-content-center h-100 bg-light text-muted">
+                                    <i class="fas fa-camera fa-lg"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1">
+                            <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                            <small class="text-muted">JPG or PNG, max 2MB</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Your Rating *</label>
+                    <div class="rating-group">
+                        <input type="radio" id="star5" name="rating" value="5" required>
+                        <label for="star5" class="rating-star"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="star4" name="rating" value="4">
+                        <label for="star4" class="rating-star"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="star3" name="rating" value="3">
+                        <label for="star3" class="rating-star"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="star2" name="rating" value="2">
+                        <label for="star2" class="rating-star"><i class="fas fa-star"></i></label>
+                        <input type="radio" id="star1" name="rating" value="1">
+                        <label for="star1" class="rating-star"><i class="fas fa-star"></i></label>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="comment" class="form-label fw-bold">Your Testimonial *</label>
+                    <textarea class="form-control form-control-lg" id="comment" name="comment" rows="5" required placeholder="Share your experience with Career Core..."></textarea>
+                </div>
+                
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary btn-lg px-5 py-3">
+                        <i class="fas fa-paper-plane me-2"></i>Submit Testimonial
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Animate stats counting
+    function animateStats() {
+        const statElements = document.querySelectorAll('.stat-number');
+        
+        statElements.forEach(stat => {
+            const target = parseInt(stat.getAttribute('data-count'));
+            const suffix = stat.textContent.includes('%') ? '%' : '+';
+            let count = 0;
+            const duration = 2000; // Animation duration in ms
+            const increment = target / (duration / 16); // 60fps
+            
+            const updateCount = () => {
+                count += increment;
+                if (count < target) {
+                    stat.textContent = Math.floor(count) + (suffix && count >= target ? suffix : '');
+                    requestAnimationFrame(updateCount);
+                } else {
+                    stat.textContent = target + (suffix ? suffix : '');
+                }
+            };
+            
+            updateCount();
+        });
+    }
+    
+    // Image preview for testimonial form
+    document.getElementById('image').addEventListener('change', function(e) {
+        const preview = document.getElementById('imagePreview');
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            preview.innerHTML = `<img src="${e.target.result}" alt="Preview" class="w-100 h-100 object-fit-cover">`;
+        }
+        
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    });
+    
+    // Initialize animations when scrolled into view
+    function initAnimations() {
+        const statsSection = document.querySelector('.stats-section');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateStats();
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        if (statsSection) {
+            observer.observe(statsSection);
+        }
+    }
+    
+    // Initialize when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        initAnimations();
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    });
+</script>
 {% endblock %}
 
 {% block seo_extra %}
@@ -414,6 +705,7 @@
         "logo": "{% static 'img/logo.png' %}"
     },
     "mainEntity": [
+        {% for testimonial in testimonials|slice:":3" %}
         {
         "@type": "Review",
         "itemReviewed": {
@@ -422,32 +714,17 @@
         },
         "author": {
             "@type": "Person",
-            "name": "Ahmed Hassan"
+            "name": "{{ testimonial.name }}"
         },
         "reviewRating": {
             "@type": "Rating",
             "ratingValue": "5",
             "bestRating": "5"
         },
-        "reviewBody": "Career Core completely transformed our hiring process. They understood our company culture and found candidates that not only had the right skills but were the perfect cultural fit."
-        },
-        {
-        "@type": "Review",
-        "itemReviewed": {
-            "@type": "Organization",
-            "name": "Career Core"
-        },
-        "author": {
-            "@type": "Person",
-            "name": "Nour Mahmoud"
-        },
-        "reviewRating": {
-            "@type": "Rating",
-            "ratingValue": "5",
-            "bestRating": "5"
-        },
-        "reviewBody": "After months of unsuccessful job searching, Career Core helped me land my dream role at an international company. Their recruiters provided invaluable coaching and preparation."
-        }
+        "reviewBody": "{{ testimonial.comment|truncatechars:200 }}",
+        "datePublished": "{{ testimonial.created_at|date:'Y-m-d' }}"
+        }{% if not forloop.last %},{% endif %}
+        {% endfor %}
     ]
     }
 </script>
