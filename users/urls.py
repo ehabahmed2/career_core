@@ -19,7 +19,6 @@ urlpatterns = [
     path('jobs/<int:pk>/action/', views.job_action, name='job_action'),
     
     # testimonials
-    path('testimonial/<int:pk>', views.edit_tmonial, name='edit_tmonial'),
     path('testimonials/<int:pk>/action/', views.tmonial_action, name='tmonial_action'),
 ]
 

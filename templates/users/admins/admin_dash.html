@@ -811,16 +811,22 @@
                 <div class="card mb-4">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="mb-0">Testimonials</h5>
-                        <button class="btn btn-sm btn-primary">
+                        <a href='{% url "tmonials" %}' class="btn btn-sm btn-primary">
                             <i class="fas fa-plus me-1"></i>Add Testimonial
-                        </button>
+                        </a>
                     </div>
                     <div class="card-body">
                         <div class="testimonial-grid">
                             {% for test in testimonials %}
                             <div class="testimonial-card">
                                 <div class="testimonial-img-container">
+                                    {% if test.image %}
                                     <img src="{{ test.image.url }}" class="testimonial-img" alt="{{test.name}}">
+                                    {% else %}
+                                    <div class="d-flex align-items-center justify-content-center h-100 bg-light text-muted">
+                                        <i class="fas fa-user fa-lg"></i>
+                                    </div>
+                                    {% endif %}
                                 </div>
                                 <div class="testimonial-body">
                                     <h6 class="testimonial-name">{{test.name}}</h6>
@@ -828,12 +834,13 @@
                                     <p class="testimonial-text">"{{ test.comment }}"</p>
                                 </div>
                                 <div class="testimonial-actions">
-                                    <button class="btn btn-sm btn-outline-primary">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteTestimonialModal">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
+                                    <form method='post' action="{% url "tmonial_action" test.pk %}">
+                                        {% csrf_token %}
+                                        <input hidden name='delete_test' value='delete'>
+                                        <button type='submit' class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteTestimonialModal">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                             {% endfor %}
@@ -905,7 +912,6 @@
 
         if (status !== 'all' && rowStatus !== status) show = false;
         if (type   !== 'all' && rowType   !== type)   show = false;
-        // add date logic here if you expose data-date attributes
 
         row.style.display = show ? '' : 'none';
     });

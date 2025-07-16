@@ -260,7 +260,10 @@ def job_action(request, pk):
     return render(request, 'users/admins/admin_dash.html', context={})
 
 def tmonial_action(request, pk):
-    pass
-
-def edit_tmonial(request, pk):
-    pass
+    if request.method == 'POST':
+        testimonial = get_object_or_404(Tmonials, id=pk)
+        if request.POST.get('delete_test'):
+            testimonial.delete()
+            messages.success(request, 'Testimonial is deleted!')
+            return redirect('admin_dashboard')
+    return render(request, 'users/admins/admin_dash.html', {})
