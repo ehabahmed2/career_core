@@ -1,0 +1,272 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Edit Job Offer | Career Core{% endblock %}
+
+{% block extra_css %}
+<style>
+    .job-form-container {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    
+    .form-header {
+        text-align: center;
+        margin-bottom: 2rem;
+        color: var(--primary-navy);
+        border-bottom: 2px solid var(--accent-gold);
+        padding-bottom: 1rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-label {
+        display: block;
+        font-weight: 600;
+        color: var(--primary-navy);
+        margin-bottom: 0.5rem;
+    }
+    
+    .form-control {
+        width: 100%;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        font-size: 1rem;
+        transition: all 0.3s;
+    }
+    
+    .form-control:focus {
+        border-color: var(--accent-gold);
+        box-shadow: 0 0 0 0.25rem rgba(193, 155, 44, 0.25);
+        outline: none;
+    }
+    
+    textarea.form-control {
+        min-height: 200px;
+        resize: vertical;
+    }
+    
+    .checkbox-container {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    /* FIXED CHECKBOX STYLES */
+    .form-check-input {
+        width: 20px;
+        height: 20px;
+        margin: 0;
+        cursor: pointer;
+        appearance: none;
+        -webkit-appearance: none;
+        background-color: #fff;
+        border: 2px solid #ced4da;
+        border-radius: 4px;
+        position: relative;
+    }
+    
+    .form-check-input:checked {
+        background-color: var(--accent-gold);
+        border-color: var(--accent-gold);
+    }
+    
+    .form-check-input:checked::after {
+        content: "";
+        position: absolute;
+        left: 6px;
+        top: 2px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+    }
+    
+    .checkbox-container label {
+        margin-bottom: 0;
+        cursor: pointer;
+        user-select: none;
+    }
+    
+    .btn-submit {
+        background-color: var(--accent-gold);
+        color: var(--primary-navy);
+        font-weight: 600;
+        padding: 0.75rem 2rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        display: block;
+        margin: 2rem auto 0;
+        transition: all 0.3s;
+    }
+    
+    .btn-submit:hover {
+        background-color: #c19b2c;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .form-note {
+        font-size: 0.9rem;
+        color: #6c757d;
+        margin-top: 0.25rem;
+        display: block;
+    }
+    @media (max-width: 768px) {
+        .job-form-container {
+            padding: 10px;
+        }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">    
+    <div class="job-form-container">
+        <h2 class="form-header">Edit Job Offer</h2>
+        
+        <form method="post">
+            {% csrf_token %}
+            
+            <!-- Display all form errors at the top -->
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                <h5 class="alert-heading"><i class="fas fa-exclamation-triangle me-2"></i> Please correct the following errors:</h5>
+                <ul class="mb-0">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    
+                    {% if form.non_field_errors %}
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+            {% endif %}
+
+            <!-- Title -->
+            <div class="form-group">
+                <label class="form-label" for="id_title">
+                    Job Title*
+                </label>
+                {{ form.title }}
+            </div>
+            
+            <!-- Company -->
+            <div class="form-group">
+                <label class="form-label" for="id_company">
+                    Company*
+                </label>
+                {{ form.company }}
+            </div>
+            
+            <!-- Location -->
+            <div class="form-group">
+                <label class="form-label" for="id_location">
+                    Location*
+                </label>
+                {{ form.location }}
+                <span class="form-note">Enter 'Remote' if location-independent</span>
+            </div>
+            
+            <!-- Remote Work -->
+            <div class="form-group">
+                <div class="checkbox-container">
+                    {{ form.is_remote }}
+                    <label for="id_is_remote" class="form-label">
+                        This is a remote position
+                    </label>
+                </div>
+            </div>
+
+            <!-- Job Type -->
+            <div class="form-group">
+                <label class="form-label" for="id_company">
+                    Job Type(FT or Part Time)*
+                </label>
+                {{ form.job_type }}
+            </div>
+            <!--Experience-->
+            <div class="form-group">
+                <label class="form-label" for="id_company">
+                    Experience*
+                </label>
+                {{ form.experience }}
+            </div>
+            
+            <!-- Salary -->
+            <div class="form-group">
+                <label class="form-label" for="id_price">
+                    Salary Range*
+                </label>
+                {{ form.price }}
+                <span class="form-note">Monthly Salary</span>
+            </div>
+            
+            <!-- Description -->
+            <div class="form-group">
+                <label class="form-label" for="id_description">
+                    Job Description*
+                </label>
+                {{ form.description }}
+            </div>
+            
+            <!-- Status -->
+            <div class="form-group">
+                <div class="checkbox-container">
+                    {{ form.is_active }}
+                    <label for="id_is_active" class="form-label">
+                        Activate this job posting immediately
+                    </label>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn-submit">
+                Update Job Offer
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const remoteCheckbox = document.getElementById('id_is_remote');
+        const locationField = document.getElementById('id_location');
+        
+        // Handle remote checkbox change
+        if (remoteCheckbox && locationField) {
+            remoteCheckbox.addEventListener('change', function() {
+                if(this.checked) {
+                    locationField.value = 'Remote';
+                    locationField.disabled = true;
+                } else {
+                    locationField.disabled = false;
+                    if(locationField.value === 'Remote') {
+                        locationField.value = '';
+                    }
+                }
+            });
+            
+            // Initialize on page load
+            if(remoteCheckbox.checked) {
+                locationField.value = 'Remote';
+                locationField.disabled = true;
+            }
+        }
+    });
+</script>
+{% endblock %}

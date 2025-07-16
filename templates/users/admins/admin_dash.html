@@ -401,6 +401,66 @@
         }
     }
 
+    
+    .status-pending {
+        background: #fff3cd;
+        color: #856404;
+    }
+    
+    .status-reviewed {
+        background: #cce5ff;
+        color: #004085;
+    }
+    
+    .status-hired {
+        background: #d4edda;
+        color: #155724;
+    }
+    
+    .status-rejected {
+        background: #f8d7da;
+        color: #721c24;
+    }
+    
+    .action-btns {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+    
+    .status-btn {
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .status-btn:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+    }
+    
+    .btn-reviewed {
+        background: #0d6efd;
+        color: white;
+    }
+    
+    .btn-hired {
+        background: #198754;
+        color: white;
+    }
+    
+    .btn-rejected {
+        background: #dc3545;
+        color: white;
+    }
+    
+
 </style>
 {% endblock %}
 
@@ -618,7 +678,6 @@
                         <th>Position</th>
                         <th>Company</th>
                         <th>Status</th>
-                        <th>Applications</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -626,24 +685,33 @@
                     {% for job in jobs %}
                     <tr>
                         <td>{{ job.title }}</td>
-                        <td> {{ job.company}} </td>
+                        <td>{{ job.company }}</td>
                         {% if job.is_active %}
                         <td><span class="status-badge badge-active">Active</span></td>
                         {% else %}
                         <td><span class="status-badge badge-inactive">Inactive</span></td>
                         {% endif %}
-                        <td>24</td>
                         <td class="action-buttons">
-                            <button class="btn btn-sm btn-outline-primary me-1">
+                            <a href="{% url 'edit_job' job.id %}" class="btn btn-sm btn-outline-primary me-1">
                                 <i class="fas fa-edit"></i>
-                            </button>
-                            <label class="toggle-switch">
-                                <input type="checkbox" checked>
-                                <span class="toggle-slider"></span>
-                            </label>
-                            <button class="btn btn-sm btn-outline-danger ms-1" data-bs-toggle="modal" data-bs-target="#deleteOfferModal">
-                                <i class="fas fa-trash"></i>
-                            </button>
+                            </a>
+                            
+                            <form method="post" action="{% url 'job_action' job.id %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                                <div class="action-btns">
+                                    <button type="submit" name="status" value="suspend" class="status-btn btn-reviewed">
+                                        <i class="fas fa-eye"></i> Suspend
+                                    </button>
+                                    <button type="submit" name="status" value="activate" class="status-btn btn-hired">
+                                        <i class="fas fa-check-circle"></i> Activate
+                                    </button>
+                                    <button type="submit" name="status" value="delete" class="status-btn btn-rejected">
+                                        <i class="fas fa-times-circle"></i> Delete
+                                    </button>
+                                </div>
+                            </form>
+
                         </td>
                     </tr>
                     {% endfor %}
@@ -652,6 +720,79 @@
         </div>
     </div>
 </div>
+
+
+<!-- Candidates Management Section -->
+<div class="table-responsive">
+    <a href="{% url "all_applications" %}" class="view-all-link">
+        <i class="fas fa-arrow-right me-1"></i> View Full Applications Management
+    </a>
+    <table class="table mt-3">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Contact</th>
+                <th>Position</th>
+                <th>Education</th>
+                <th>Age</th>
+                <th>Location</th>
+                <th>Applied On</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for application in applications %}
+            <tr>
+                <td>{{ application.full_name }}</td>
+                <td>
+                    <div>{{ application.email }}</div>
+                    <div class="text-muted small">{{ application.whatsapp }}</div>
+                </td>
+                <td>
+                    {% if application.job %}
+                    <strong>{{ application.job.title }}</strong>
+                    <div class="text-muted small">{{ application.job.company }}</div>
+                    {% else %}
+                    <span class="text-muted">No position linked</span>
+                    {% endif %}
+                </td>
+                <td>{{ application.get_education_display }}</td>
+                <td>{{ application.age }}</td>
+                <td>{{ application.location }}</td>
+                <td>{{ application.application_date|date:"M d, Y" }}</td>
+                <td>
+                    <span class="status-badge status-{{ application.status|default:'pending' }}">
+                        {{ application.status }}
+                    </span>
+                </td>
+                <td>
+                    <form method="post" action="{% url 'update_candidate_status' application.id %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                        <div class="action-btns">
+                            <button type="submit" name="status" value="reviewed" class="status-btn btn-reviewed">
+                                <i class="fas fa-eye"></i> Review
+                            </button>
+                            <button type="submit" name="status" value="hired" class="status-btn btn-hired">
+                                <i class="fas fa-check-circle"></i> Hire
+                            </button>
+                            <button type="submit" name="status" value="rejected" class="status-btn btn-rejected">
+                                <i class="fas fa-times-circle"></i> Reject
+                            </button>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="9" class="text-center py-4">No applications found matching your criteria</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
 
 
 <!-- Site Content Management Section -->
@@ -826,6 +967,8 @@
         row.style.display = show ? '' : 'none';
     });
     }
+    
+    
 </script>
 
 {% endblock %}

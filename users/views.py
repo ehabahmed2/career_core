@@ -6,12 +6,15 @@ from django.shortcuts import get_object_or_404
 
 from .models import BaseUser, RecruiterProfile, AdminProfile
 from jobs.models import Job
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, JsonResponse
 from testimonials.models import Tmonials
 from .forms import LoginForm, RegisterForm, UserUpdateForm
 import secrets
 from django.core.cache import cache 
 from django.views.decorators.http import require_POST
+
+from jobs.models import CandidateDetails
+from jobs.forms import CreateJobForm
 
 
 # Create your views here.
@@ -37,10 +40,14 @@ def admin_dash(request):
     # get testimonials
     testimonials = Tmonials.objects.all()
     
+    applications = CandidateDetails.objects.all()[:6]
+    
     context = {
         'recruiters': recruiters,
         'jobs': jobs,
         'testimonials': testimonials,
+        'applications': applications,
+        
     }
     return render(request, 'users/admins/admin_dash.html', context=context)
 
@@ -198,3 +205,57 @@ def update_profile(request):
     else:
         form = UserUpdateForm(instance=user)
     return render(request, 'users/profile_update.html', context={'form':form})
+
+@login_required
+def edit_job(request, pk):
+    user = request.user
+    # Safe check for permissions
+    is_head_recruiter = False
+    if hasattr(user, 'recruiter_profile'):
+        is_head_recruiter = user.recruiter_profile.is_head_recruiter
+
+    if not (user.is_admin or user.is_superuser or is_head_recruiter):
+        return HttpResponseForbidden("You don't have permission to access this page")
+    
+    job = get_object_or_404(Job, id=pk)
+    if request.method == 'POST':
+        form = CreateJobForm(request.POST,instance=job)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Updated offer')
+            return redirect('admin_dashboard')
+    else:
+        form = CreateJobForm(instance=job)
+    return render(request, 'jobs/edit_job.html', context={'form':form})
+
+
+@require_POST
+def job_action(request, pk):
+    user = request.user
+    # Safe check for permissions
+    is_head_recruiter = False
+    if hasattr(user, 'recruiter_profile'):
+        is_head_recruiter = user.recruiter_profile.is_head_recruiter
+
+    job = get_object_or_404(Job, id=pk)
+    
+    # validate status
+    valid_status = ['suspend', 'activate', 'delete']
+    new_status = request.POST.get('status')
+    
+    if new_status in valid_status:
+        if new_status == 'suspend':
+            job.is_active = False
+            job.save()
+        elif new_status == 'activate':
+            job.is_active = True
+            job.save()
+        else:
+            job.delete()
+        messages.success(request, f"Action to {new_status} is Done. :)")
+        return redirect('admin_dashboard')
+    else:
+        messages.error(request, 'Not valid status!')
+
+    return render(request, 'users/admins/admin_dash.html', context={})
+

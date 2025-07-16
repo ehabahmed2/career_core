@@ -263,11 +263,11 @@
                         <td>{{ application.application_date|date:"M d, Y" }}</td>
                         <td>
                             <span class="status-badge status-{{ application.status|default:'pending' }}">
-                                {{ application.get_status_display|default:"Pending" }}
+                                {{ application.status }}
                             </span>
                         </td>
                         <td>
-                            <form method="post" action="{% url 'update_candidate_statu' application.id %}">
+                            <form method="post" action="{% url 'update_candidate_status' application.id %}">
                                 {% csrf_token %}
                                 <input type="hidden" name="next" value="{{ request.get_full_path }}">
                                 <div class="action-btns">
@@ -292,51 +292,6 @@
                 </tbody>
             </table>
         </div>
-        
-        <!-- Pagination -->
-        {% if applications.has_other_pages %}
-        <nav aria-label="Page navigation">
-            <ul class="pagination justify-content-center">
-                {% if applications.has_previous %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ applications.previous_page_number }}{% for key,value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
-                        &laquo; Previous
-                    </a>
-                </li>
-                {% else %}
-                <li class="page-item disabled">
-                    <span class="page-link">&laquo; Previous</span>
-                </li>
-                {% endif %}
-                
-                {% for i in applications.paginator.page_range %}
-                {% if applications.number == i %}
-                <li class="page-item active">
-                    <span class="page-link">{{ i }}</span>
-                </li>
-                {% else %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ i }}{% for key,value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
-                        {{ i }}
-                    </a>
-                </li>
-                {% endif %}
-                {% endfor %}
-                
-                {% if applications.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ applications.next_page_number }}{% for key,value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">
-                        Next &raquo;
-                    </a>
-                </li>
-                {% else %}
-                <li class="page-item disabled">
-                    <span class="page-link">Next &raquo;</span>
-                </li>
-                {% endif %}
-            </ul>
-        </nav>
-        {% endif %}
     </div>
 </div>
 {% endblock %}

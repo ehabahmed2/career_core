@@ -72,6 +72,16 @@ def application_success(request, job_id):
 
 
 def view_applications(request):
+    user = request.user
+    # Safe check for permissions
+    is_head_recruiter = False
+    if hasattr(user, 'recruiter_profile'):
+        is_head_recruiter = user.recruiter_profile.is_head_recruiter
+
+    if not (user.is_admin or user.is_superuser or is_head_recruiter):
+        return HttpResponseForbidden("You don't have permission to access this page")
+    
+    
     applications = CandidateDetails.objects.all().select_related('job')
     all_jobs = Job.objects.all()
     # Filtering
@@ -99,6 +109,20 @@ def view_applications(request):
     return render(request, 'jobs/candidate/candidate_apps.html', context)
 
 def application_status_changer(request, pk):
-    application = get_object_or_404(CandidateDetails, id=pk)
-    return render('jobs/candidate/candidate_apps.html', context={})
+    
+    if request.method == 'POST':
+        application = get_object_or_404(CandidateDetails, id=pk)
+        new_status = request.POST.get('status')
+        
+        # validate the status
+        valid_statuses = ['reviewed', 'hired', 'rejected']
+        if new_status in valid_statuses:
+            application.status = new_status
+            application.save()
+            messages.success(request, f"Application status updated to {new_status.capitalize()}")
+            return redirect('all_applications')
+        else: 
+            messages.error(request, 'Invalid status')
+    return render(request, 'jobs/candidate/candidate_apps.html', context={})
+
 

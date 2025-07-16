@@ -13,5 +13,9 @@ urlpatterns = [
     # update user profile
     path('profile/update/', views.update_profile, name='profile_update'),
     path('profile/', views.profile, name='profile'),
+    
+    # job offers
+    path('job/<int:pk>', views.edit_job, name='edit_job'),
+    path('jobs/<int:pk>/action/', views.job_action, name='job_action'),
 ]
 
