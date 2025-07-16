@@ -513,19 +513,19 @@
     <div class="container">
         <div class="row">
             <div class="col-md-3 stat-container animate__animated animate__fadeIn">
-                <div class="stat-number" data-count="98">0</div>
+                <div class="stat-number" data-count="98" data-suffix="%">0</div>
                 <div class="stat-label">Client Satisfaction</div>
             </div>
             <div class="col-md-3 stat-container animate__animated animate__fadeIn animate-delay-1">
-                <div class="stat-number" data-count="2500">0</div>
+                <div class="stat-number" data-count="2500" data-suffix="+">0</div>
                 <div class="stat-label">Candidates Placed</div>
             </div>
             <div class="col-md-3 stat-container animate__animated animate__fadeIn animate-delay-2">
-                <div class="stat-number" data-count="95">0</div>
+                <div class="stat-number" data-count="95" data-suffix="%" >0</div>
                 <div class="stat-label">Retention Rate</div>
             </div>
             <div class="col-md-3 stat-container animate__animated animate__fadeIn animate-delay-3">
-                <div class="stat-number" data-count="50">0</div>
+                <div class="stat-number" data-count="50" data-suffix="+">0</div>
                 <div class="stat-label">Company Partners</div>
             </div>
         </div>
@@ -558,26 +558,19 @@
                 <div class="row mb-4">
                     <div class="col-md-6 mb-3 mb-md-0">
                         <label for="name" class="form-label fw-bold">Your Name *</label>
-                        <input type="text" class="form-control form-control-lg" id="name" name="name" required>
+                        {{ form.name }}
                     </div>
                     <div class="col-md-6">
                         <label for="title" class="form-label fw-bold">Your Title/Position</label>
-                        <input type="text" class="form-control form-control-lg" id="title" name="title">
+                        {{ form.title }}
                     </div>
                 </div>
                 
                 <div class="mb-4">
                     <label for="image" class="form-label fw-bold">Your Photo (Optional)</label>
                     <div class="d-flex align-items-center">
-                        <div class="me-3">
-                            <div class="author-image" id="imagePreview">
-                                <div class="d-flex align-items-center justify-content-center h-100 bg-light text-muted">
-                                    <i class="fas fa-camera fa-lg"></i>
-                                </div>
-                            </div>
-                        </div>
                         <div class="flex-grow-1">
-                            <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                            {{ form.image }}
                             <small class="text-muted">JPG or PNG, max 2MB</small>
                         </div>
                     </div>
@@ -601,7 +594,7 @@
                 
                 <div class="mb-4">
                     <label for="comment" class="form-label fw-bold">Your Testimonial *</label>
-                    <textarea class="form-control form-control-lg" id="comment" name="comment" rows="5" required placeholder="Share your experience with Career Core..."></textarea>
+                    {{ form.comment }}
                 </div>
                 
                 <div class="text-center">
@@ -693,39 +686,79 @@
 
 {% block seo_extra %}
 <!-- Testimonials Structured Data -->
-<script type="application/ld+json">
-    {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": "Client Testimonials - Career Core",
-    "description": "Real success stories from Career Core's clients and candidates",
-    "publisher": {
-        "@type": "Organization",
-        "name": "Career Core",
-        "logo": "{% static 'img/logo.png' %}"
-    },
-    "mainEntity": [
-        {% for testimonial in testimonials|slice:":3" %}
-        {
-        "@type": "Review",
-        "itemReviewed": {
-            "@type": "Organization",
-            "name": "Career Core"
-        },
-        "author": {
-            "@type": "Person",
-            "name": "{{ testimonial.name }}"
-        },
-        "reviewRating": {
-            "@type": "Rating",
-            "ratingValue": "5",
-            "bestRating": "5"
-        },
-        "reviewBody": "{{ testimonial.comment|truncatechars:200 }}",
-        "datePublished": "{{ testimonial.created_at|date:'Y-m-d' }}"
-        }{% if not forloop.last %},{% endif %}
-        {% endfor %}
-    ]
+<script>
+function animateStats() {
+    const statElements = document.querySelectorAll('.stat-number');
+
+    statElements.forEach(stat => {
+        const target = parseInt(stat.getAttribute('data-count'));
+        const suffix = stat.getAttribute('data-suffix') || '';
+        let count = 0;
+        const duration = 2000;
+        const increment = target / (duration / 16);
+
+        const updateCount = () => {
+            count += increment;
+            if (count < target) {
+                stat.textContent = Math.floor(count);
+                requestAnimationFrame(updateCount);
+            } else {
+                stat.textContent = target + suffix;
+            }
+        };
+
+        updateCount();
+    });
+}
+
+// Wait for intersection
+function initAnimations() {
+    const statsSection = document.querySelector('.stats-section');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateStats();
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    if (statsSection) {
+        observer.observe(statsSection);
     }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    initAnimations();
+
+    // Image preview
+    const imageInput = document.getElementById('image');
+    if (imageInput) {
+        imageInput.addEventListener('change', function (e) {
+            const preview = document.getElementById('imagePreview');
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                if (preview) {
+                    preview.innerHTML = `<img src="${e.target.result}" alt="Preview" class="w-100 h-100 object-fit-cover">`;
+                }
+            }
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+});
 </script>
+
 {% endblock %}
