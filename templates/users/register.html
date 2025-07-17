@@ -251,32 +251,39 @@
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
 
-                <!-- Global form errors -->
-                {% if form.errors %}
-                <div class="alert alert-danger mt-3">
-                    <h6 class="alert-heading">
-                    <i class="fas fa-exclamation-triangle me-2"></i>
-                    Please fix the following errors:
-                    </h6>
-                    <ul class="mb-0 ps-3">
-                    {# non‑field errors first #}
-                    {% for err in form.non_field_errors %}
-                        <li>{{ err }}</li>
+                <!-- Display all form errors at the top -->
+        {% if form.errors or profile_form.errors %}
+        <div class="alert alert-danger">
+            <h5 class="alert-heading"><i class="fas fa-exclamation-triangle me-2"></i> Please correct the following errors:</h5>
+            <ul class="mb-0">
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <li><strong>{{ field.label }}:</strong> {{ error }}</li>
                     {% endfor %}
-
-                    {# then field errors #}
-                    {% for field, errors in form.errors.items %}
-                        {# skip non‑field_errors since we did them above #}
-                        {% if field != '__all__' %}
-                        {% for error in errors %}
-                            <li><strong>{{ form[field].label }}:</strong> {{ error }}</li>
-                        {% endfor %}
-                        {% endif %}
+                {% endfor %}
+                
+                {% if form.non_field_errors %}
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
                     {% endfor %}
-                    </ul>
-                </div>
                 {% endif %}
-
+                
+                {% if profile_form %}
+                    {% for field in profile_form %}
+                        {% for error in field.errors %}
+                            <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    
+                    {% if profile_form.non_field_errors %}
+                        {% for error in profile_form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endif %}
+                {% endif %}
+            </ul>
+        </div>
+        {% endif %}
                 
                 <!-- Personal Information Section -->
                 <div class="form-section">

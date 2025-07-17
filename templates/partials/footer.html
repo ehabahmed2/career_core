@@ -18,7 +18,7 @@
                     <li><a href="{% url 'home' %}"><i class="fas fa-chevron-right me-2"></i> Home</a></li>
                     <li><a href="{% url "about" %}"><i class="fas fa-chevron-right me-2"></i> About Us</a></li>
                     <li><a href="{% url "job_listings" %}"><i class="fas fa-chevron-right me-2"></i> Job Listings</a></li>
-                    <li><a href=""><i class="fas fa-chevron-right me-2"></i> Services</a></li>
+                    <li><a href="{% url "services" %}"><i class="fas fa-chevron-right me-2"></i> Services</a></li>
                     <li><a href="{% url "contact" %}"><i class="fas fa-chevron-right me-2"></i> Contact Us</a></li>
                 </ul>
             </div>
@@ -26,11 +26,9 @@
             <div class="col-md-3 mb-4 mb-md-0">
                 <h3 class="footer-title">Services</h3>
                 <ul class="footer-links list-unstyled">
-                    <li><a href="#"><i class="fas fa-chevron-right me-2"></i> Recruitment Solutions</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right me-2"></i> Executive Search</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right me-2"></i> Temporary Staffing</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right me-2"></i> Career Coaching</a></li>
-                    <li><a href="#"><i class="fas fa-chevron-right me-2"></i> HR Consulting</a></li>
+                    <li><a href="{% url "contact" %}"><i class="fas fa-chevron-right me-2"></i> Recruitment Solutions</a></li>
+                    <li><a href="{% url "job_listings" %}"><i class="fas fa-chevron-right me-2"></i>Searching for jobs</a></li>
+                    <li><a href="{% url "register" %}"><i class="fas fa-chevron-right me-2"></i>Looking to join</a></li>
                 </ul>
             </div>
             
@@ -38,17 +36,13 @@
                 <h3 class="footer-title">Contact Us</h3>
                 <ul class="footer-contact list-unstyled">
                     <li>
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>123 Recruitment Street, Cairo, Egypt</span>
-                    </li>
-                    <li>
                         <i class="fas fa-phone"></i>
-                        <span>+20 123 456 7890</span>
+                        <span>+20 101 778 7275</span>
                     </li>
-                    <li>
+                    {% comment %} <li>
                         <i class="fas fa-envelope"></i>
                         <span>info@careercore.com</span>
-                    </li>
+                    </li> {% endcomment %}
                     <li>
                         <i class="fas fa-clock"></i>
                         <span>Mon-Fri: 9AM - 6PM</span>
@@ -62,10 +56,10 @@
                 <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
                     &copy; {{year}} Career Core. All Rights Reserved.
                 </div>
-                <div class="col-md-6 text-center text-md-end">
+                {% comment %} <div class="col-md-6 text-center text-md-end">
                     <a href="#" class="text-white me-3">Privacy Policy</a>
                     <a href="#" class="text-white">Terms of Service</a>
-                </div>
+                </div> {% endcomment %}
             </div>
         </div>
     </div>
