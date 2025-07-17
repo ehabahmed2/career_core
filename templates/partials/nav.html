@@ -1,53 +1,68 @@
-<nav class="navbar navbar-expand-lg navbar-dark">
+<nav class="navbar navbar-expand-lg navbar-dark=">
     <div class="container">
         <a class="navbar-brand" href="{% url 'home' %}">
             <i class="fas fa-briefcase me-2"></i>CAREER CORE
         </a>
-        
+
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
-        
+
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
+                <!-- Static links -->
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'home' %}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url "about" %}">About Us</a>
+                    <a class="nav-link" href="{% url 'about' %}">About Us</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url "job_listings" %}">Job Listings</a>
+                    <a class="nav-link" href="{% url 'job_listings' %}">Job Listings</a>
                 </li>
+
+                <!-- Services Dropdown -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown">
                         Services
                     </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{% url "job_listings" %}">For Job Seekers</a></li>
+                    <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
+                        <li><a class="dropdown-item" href="{% url 'services' %}">Services</a></li>
+                        <li><a class="dropdown-item" href="{% url 'job_listings' %}">For Job Seekers</a></li>
+                    </ul>
+                </li>
+
+                <!-- Account Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown">
+                        Account
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="accountDropdown">
                         {% if user.is_authenticated %}
-                        {% if user.recruiter_profile.is_head_recruiter or user.is_superuser %}
-                        <li><a class="dropdown-item" href="{% url "admin_dashboard" %}">Dashboard</a></li>
-                        {% endif %}
+                            {% if user.recruiter_profile.is_head_recruiter or user.is_superuser %}
+                                <li><a class="dropdown-item" href="{% url 'admin_dashboard' %}">Dashboard</a></li>
+                            {% endif %}
+                            <li><a class="dropdown-item" href="{% url 'logout' %}">Log out</a></li>
+                            <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
                         {% else %}
-                        <li><a class="dropdown-item" href="{% url "login" %}">For Employers</a></li>
+                            <li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
+                            <li><a class="dropdown-item" href="{% url 'register' %}">Register</a></li>
                         {% endif %}
                     </ul>
                 </li>
+
+                <!-- Contact -->
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url "contact" %}">Contact</a>
+                    <a class="nav-link" href="{% url 'contact' %}">Contact</a>
                 </li>
+
+                <!-- Authenticated user's name as button -->
                 {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url "logout" %}">Log out</a>
-                </li>
                 <li class="nav-item ms-lg-2">
-                    <a class="btn btn-outline-light" href="{% url "profile" %}">
-                        <i class="fas fa-user me-1"></i> {{user.full_name}}
+                    <a class="btn btn-outline-light" href="{% url 'profile' %}">
+                        <i class="fas fa-user me-1"></i> {{ user.full_name }}
                     </a>
-                    
                 </li>
-                
                 {% endif %}
             </ul>
         </div>
