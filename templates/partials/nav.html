@@ -39,7 +39,7 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="accountDropdown">
                         {% if user.is_authenticated %}
-                            {% if user.recruiter_profile.is_head_recruiter or user.is_superuser %}
+                            {% if user.recruiter_profile.is_head_recruiter or user.is_superuser or user.is_admin%}
                                 <li><a class="dropdown-item" href="{% url 'admin_dashboard' %}">Dashboard</a></li>
                             {% endif %}
                             <li><a class="dropdown-item" href="{% url 'logout' %}">Log out</a></li>

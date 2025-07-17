@@ -261,6 +261,7 @@
             <div id="jobs-grid" class="jobs-grid">
                 <!-- Job cards will be loaded here via AJAX -->
                 {% for job in jobs %}
+                {% if not job.is_active %}
                 <div class="job-card">
                 <div class="job-card-header">
                     <h3 class="job-title">{{ job.title }}</h3>
@@ -304,7 +305,7 @@
                     </a>
                 </div>
                 </div>
-
+                {% endif %}
                 {% empty %}
                 <div class="col-12 text-center py-5">
                     <i class="fas fa-briefcase fa-3x text-muted mb-3"></i>

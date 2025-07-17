@@ -161,7 +161,7 @@ def recruiter_action(request, recruiter_id):
         profile.is_approved = True
         profile.save()
         messages.success(request, f"Approved {recruiter.full_name}")
-    elif action == 'promote' and profile.is_head_recruiter:
+    elif action == 'promote':
         profile.is_head_recruiter = True
         profile.save()
         messages.success(request, f"Promoted {recruiter.full_name} to Head Recruiter")
