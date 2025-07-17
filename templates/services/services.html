@@ -186,6 +186,25 @@
         object-fit: contain;
     }
     
+    .author-image {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin: 0 auto 1.5rem;
+    }
+    
+    .author-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .author-image .fa-user {
+        font-size: 2.5rem;
+        color: #777;
+    }
+    
     .testimonial-text {
         font-style: italic;
         color: #555;
@@ -286,6 +305,7 @@
             height: 40px;
             right: -15px;
         }
+
     }
 </style>
 {% endblock %}
@@ -319,7 +339,6 @@
                     </div>
                     <h3 class="service-title">Recruitment Process Outsourcing</h3>
                     <p class="service-description">End-to-end recruitment solutions tailored to your business needs. We manage the entire hiring process so you can focus on core operations.</p>
-                    <a href="#" class="service-link">Learn More <i class="fas fa-arrow-right ms-2"></i></a>
                 </div>
             </div>
             
@@ -331,7 +350,6 @@
                     </div>
                     <h3 class="service-title">Headhunting & Executive Search</h3>
                     <p class="service-description">Specialized senior-level talent acquisition for leadership roles. We identify and attract top executives who drive business success.</p>
-                    <a href="#" class="service-link">Learn More <i class="fas fa-arrow-right ms-2"></i></a>
                 </div>
             </div>
             
@@ -343,45 +361,9 @@
                     </div>
                     <h3 class="service-title">Mass Recruitment</h3>
                     <p class="service-description">Efficient solutions for high-volume recruitment campaigns. Ideal for rapid expansion or seasonal staffing needs in the Egyptian market.</p>
-                    <a href="#" class="service-link">Learn More <i class="fas fa-arrow-right ms-2"></i></a>
                 </div>
             </div>
             
-            <!-- Service 4 -->
-            <div class="col-md-4">
-                <div class="service-card p-4 text-center h-100">
-                    <div class="service-icon">
-                        <i class="fas fa-briefcase"></i>
-                    </div>
-                    <h3 class="service-title">Temporary Staffing</h3>
-                    <p class="service-description">Flexible staffing solutions for short-term business needs. Quickly fill temporary positions with qualified professionals.</p>
-                    <a href="#" class="service-link">Learn More <i class="fas fa-arrow-right ms-2"></i></a>
-                </div>
-            </div>
-            
-            <!-- Service 5 -->
-            <div class="col-md-4">
-                <div class="service-card p-4 text-center h-100">
-                    <div class="service-icon">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div>
-                    <h3 class="service-title">Recruitment Training</h3>
-                    <p class="service-description">Specialized training programs for recruitment professionals. Enhance your team's skills with our industry-leading training.</p>
-                    <a href="#" class="service-link">Learn More <i class="fas fa-arrow-right ms-2"></i></a>
-                </div>
-            </div>
-            
-            <!-- Service 6 -->
-            <div class="col-md-4">
-                <div class="service-card p-4 text-center h-100">
-                    <div class="service-icon">
-                        <i class="fas fa-laptop-code"></i>
-                    </div>
-                    <h3 class="service-title">Technology Recruitment</h3>
-                    <p class="service-description">Specialized tech talent acquisition for digital transformation. We connect you with Egypt's top IT and technology professionals.</p>
-                    <a href="#" class="service-link">Learn More <i class="fas fa-arrow-right ms-2"></i></a>
-                </div>
-            </div>
         </div>
     </div>
 </section>
@@ -400,47 +382,28 @@
             <div class="col">
                 <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner">
-                        <!-- Testimonial 1 -->
-                        <div class="carousel-item active">
+                        {% for test in tests %}
+                        <div class="carousel-item{% if forloop.first %} active{% endif %}">
                             <div class="row justify-content-center">
                                 <div class="col-md-8">
                                     <div class="testimonial-card">
-                                        <img src="{% static 'img/client1.png' %}" alt="TP Contentrix" class="testimonial-logo">
-                                        <p class="testimonial-text">"Career Core transformed our recruitment process, helping us fill 120 telesales positions in just 4 weeks. Their understanding of the Egyptian market is unparalleled."</p>
-                                        <p class="testimonial-author">Ahmed Mahmoud</p>
-                                        <p class="testimonial-position">HR Director, TP Contentrix</p>
+                                        <div class="author-image">
+                                            {% if test.image %}
+                                                <img src="{{ test.image.url }}" alt="{{ test.name }}" loading="lazy">
+                                            {% else %}
+                                                <div class="d-flex align-items-center justify-content-center h-100 bg-light">
+                                                    <i class="fas fa-user fa-lg"></i>
+                                                </div>
+                                            {% endif %} 
+                                        </div>
+                                        <p class="testimonial-text">"{{ test.comment }}"</p>
+                                        <p class="testimonial-author">{{ test.name }}</p>
+                                        <p class="testimonial-position">{{ test.title }}</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- Testimonial 2 -->
-                        <div class="carousel-item">
-                            <div class="row justify-content-center">
-                                <div class="col-md-8">
-                                    <div class="testimonial-card">
-                                        <img src="{% static 'img/client2.png' %}" alt="Tech Innovate" class="testimonial-logo">
-                                        <p class="testimonial-text">"Their executive search team found us the perfect CTO when we were expanding our operations in Cairo. The candidate has been instrumental in our growth strategy."</p>
-                                        <p class="testimonial-author">Nadia Hassan</p>
-                                        <p class="testimonial-position">CEO, Tech Innovate Egypt</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Testimonial 3 -->
-                        <div class="carousel-item">
-                            <div class="row justify-content-center">
-                                <div class="col-md-8">
-                                    <div class="testimonial-card">
-                                        <img src="{% static 'img/client3.png' %}" alt="Retail Egypt" class="testimonial-logo">
-                                        <p class="testimonial-text">"For our seasonal staffing needs, Career Core provided 85 qualified retail staff across 12 locations in record time. Their mass recruitment solution saved us countless hours."</p>
-                                        <p class="testimonial-author">Omar Farouk</p>
-                                        <p class="testimonial-position">Operations Manager, Retail Egypt</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        {% endfor %}
                     </div>
                     
                     <!-- Carousel Controls -->
