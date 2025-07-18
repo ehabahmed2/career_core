@@ -284,7 +284,7 @@ def send_reset_token(request):
             PasswordResetToken.objects.create(user=user, token=token)
             send_mail(
                 "Your Password Reset Token",
-                f"Your verification code is: {token}",
+                f"Your verification code for Career Core is: {token}",
                 # teh sender email
                 os.getenv('EMAIL_HOST_USER'),
                 # user's email
