@@ -160,3 +160,11 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER =   os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')  
+
+
+
+# Password reset timeout in seconds (3 days)
+PASSWORD_RESET_TIMEOUT = 259200
+
+# URLs
+LOGIN_URL = 'login'  # Your login route name

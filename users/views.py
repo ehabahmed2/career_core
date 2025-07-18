@@ -4,7 +4,7 @@ from django.contrib.auth import login, logout, authenticate, get_user_model
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 
-from .models import BaseUser, RecruiterProfile, AdminProfile
+from .models import BaseUser, RecruiterProfile, AdminProfile, PasswordResetToken
 from jobs.models import Job
 from django.http import HttpResponseForbidden, JsonResponse
 from testimonials.models import Tmonials
@@ -15,6 +15,10 @@ from django.views.decorators.http import require_POST
 
 from jobs.models import CandidateDetails
 from jobs.forms import CreateJobForm
+
+import os
+from django.core.mail import send_mail
+
 
 
 # Create your views here.
@@ -267,3 +271,74 @@ def tmonial_action(request, pk):
             messages.success(request, 'Testimonial is deleted!')
             return redirect('admin_dashboard')
     return render(request, 'users/admins/admin_dash.html', {})
+
+
+# send the email to reset the password
+def send_reset_token(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        User = get_user_model()
+        try:
+            user = User.objects.get(email=email)
+            token = PasswordResetToken.generate_token()
+            PasswordResetToken.objects.create(user=user, token=token)
+            send_mail(
+                "Your Password Reset Token",
+                f"Your verification code is: {token}",
+                # teh sender email
+                os.getenv('EMAIL_HOST_USER'),
+                # user's email
+                [email],
+                fail_silently=False,
+            )
+            # then redirect to verify the token
+            return redirect('token_verification')
+        except User.DoesNotExist:
+            return render(request, 'users/pass_reset/password_reset_form.html', {'error': 'Email not found'})
+    return render(request, 'users/pass_reset/password_reset_form.html')
+
+
+def verify_token(request):
+    if request.method == 'POST':
+        token = request.POST.get('token')
+        try:
+            reset_token = PasswordResetToken.objects.get(
+                token=token, 
+                is_used=False
+            )
+            request.session['reset_user_id'] = reset_token.user.id
+            reset_token.is_used = True
+            reset_token.save()
+            return redirect('new_password')
+        except PasswordResetToken.DoesNotExist:
+            return render(request, 'users/pass_reset/token_verification.html', {'error': 'Invalid token'})
+    return render(request, 'users/pass_reset/token_verification.html')
+
+def new_password(request):
+    if 'reset_user_id' not in request.session:
+        return redirect('password_reset')
+        
+    if request.method == 'POST':
+        user = get_user_model().objects.get(id=request.session['reset_user_id'])
+        password = request.POST.get('password')
+        user.set_password(password)
+        user.save()
+        del request.session['reset_user_id']
+        return redirect('password_reset_complete')
+        
+    return render(request, 'users/pass_reset/new_password.html')
+
+def password_reset_complete(request):
+    # Clear any session variables
+    if 'reset_user_id' in request.session:
+        del request.session['reset_user_id']
+    
+    # Optional: Auto-login after reset
+    if 'new_user_id' in request.session:
+        user = User.objects.get(id=request.session['new_user_id'])
+        login(request, user)
+        del request.session['new_user_id']
+        messages.success(request, 'password has changed now!')
+        return redirect('homes')
+    
+    return render(request, 'users/pass_reset/password_reset_complete.html')

@@ -1,5 +1,7 @@
 from django.urls import path
 from . import views
+from django.contrib.auth import views as auth_views
+
 urlpatterns = [
     path('admin-dash/', views.admin_dash, name='admin_dashboard'),
     path('login/', views.login_form, name='login'),
@@ -20,5 +22,11 @@ urlpatterns = [
     
     # testimonials
     path('testimonials/<int:pk>/action/', views.tmonial_action, name='tmonial_action'),
+    
+    # rset the password
+    path('password-reset/', views.send_reset_token, name='password_reset'),
+    path('token-verification/', views.verify_token, name='token_verification'),
+    path('new-password/', views.new_password, name='new_password'),
+    path('password-reset-success/', views.password_reset_complete, name='password_reset_complete'),
 ]
 

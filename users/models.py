@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.contrib.auth import get_user_model
+import random
 # base user to inhirit from
 class BaseUser(AbstractUser):
     class Role(models.TextChoices):
@@ -82,3 +84,16 @@ class RecruiterProfile(models.Model):
         return f"{self.user.full_name} (Recruiter)"
 
 
+# models.py
+
+User = get_user_model()
+
+class PasswordResetToken(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    token = models.CharField(max_length=6)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_used = models.BooleanField(default=False)
+
+    @classmethod
+    def generate_token(cls):
+        return str(random.randint(100000, 999999))  # 6-digit token

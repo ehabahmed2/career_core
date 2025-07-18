@@ -287,7 +287,7 @@
                         {{ form.remember_me }}
                         <label for="remember">Remember me</label>
                     </div>
-                    <a href="#" class="forgot-password">Forgot Password?</a>
+                    <a href="{% url "password_reset" %}" class="forgot-password">Forgot Password?</a>
                     <a href="{% url "register" %}" class="forgot-password">No account yet?</a>
                 </div>
                 <button type="submit" class="btn-login">Login to Dashboard</button>
