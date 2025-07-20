@@ -73,49 +73,6 @@
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
     }
     
-    /* Stats Section */
-    .stats-section {
-        background-color: var(--white);
-        padding: 5rem 0;
-    }
-    
-    .stat-container {
-        text-align: center;
-        padding: 1.5rem;
-    }
-    
-    .stat-circle {
-        width: 180px;
-        height: 180px;
-        border-radius: 50%;
-        border: 4px solid var(--accent-gold);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 1.5rem;
-        position: relative;
-        transition: transform 0.3s ease;
-    }
-    
-    .stat-circle:hover {
-        transform: scale(1.05);
-    }
-    
-    .stat-number {
-        font-size: 3.5rem;
-        font-weight: 700;
-        color: var(--accent-gold);
-        line-height: 1;
-    }
-    
-    .stat-label {
-        font-size: 1.2rem;
-        font-weight: 600;
-        color: var(--primary-navy);
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-    
     /* Process Section */
     .process-section {
         background-color: var(--light-gold);
@@ -272,19 +229,307 @@
             font-size: 1.4rem;
         }
         
-        .stat-circle {
-            width: 150px;
-            height: 150px;
-        }
-        
-        .stat-number {
-            font-size: 3rem;
-        }
         
         .process-step {
             flex: 0 0 100%;
         }
     }
+        /* Jobs Section */
+    .jobs-section {
+        padding: 80px 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 40px;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .section-title {
+        font-size: 2.5rem;
+        color: var(--primary-navy);
+        font-weight: 700;
+        position: relative;
+        padding-bottom: 15px;
+    }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 80px;
+        height: 4px;
+        background: var(--accent-gold);
+        border-radius: 2px;
+    }
+
+    .section-subtitle {
+        font-size: 1.1rem;
+        color: #666;
+        max-width: 600px;
+        margin-top: 15px;
+    }
+
+    /* "Check All Offers" Button */
+    .btn-all-offers {
+        background: linear-gradient(135deg, var(--primary-navy), #1a3a8f);
+        color: white;
+        border: none;
+        padding: 14px 32px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 50px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 6px 15px rgba(10, 36, 99, 0.25);
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .btn-all-offers:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(10, 36, 99, 0.35);
+        background: linear-gradient(135deg, #1a3a8f, var(--primary-navy));
+    }
+
+    .btn-all-offers:active {
+        transform: translateY(1px);
+        box-shadow: 0 4px 10px rgba(10, 36, 99, 0.3);
+    }
+
+    /* Jobs Grid */
+    .jobs-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+        gap: 30px;
+        margin-top: 30px;
+    }
+
+    .job-card {
+        background: var(--white);
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        transition: all 0.4s ease;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        position: relative;
+    }
+
+    .job-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .job-card-header {
+        background: linear-gradient(135deg, var(--primary-navy), #1a3a8f);
+        color: var(--white);
+        padding: 25px;
+        position: relative;
+    }
+
+    .job-type {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: var(--accent-gold);
+        color: var(--primary-navy);
+        font-size: 0.85rem;
+        font-weight: 600;
+        padding: 5px 15px;
+        border-radius: 20px;
+    }
+
+    .job-card-header h3 {
+        font-size: 1.5rem;
+        margin-bottom: 8px;
+        font-weight: 700;
+        padding-right: 40px;
+    }
+
+    .company-name {
+        font-size: 1.05rem;
+        opacity: 0.9;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .job-card-body {
+        padding: 25px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .company-logo-container {
+        width: 80px;
+        height: 80px;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 20px;
+        border: 1px solid #eaeaea;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--white);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    .company-logo {
+        width: 70%;
+        height: 70%;
+        object-fit: contain;
+    }
+
+    .job-description {
+        color: #555;
+        font-size: 1rem;
+        line-height: 1.7;
+        margin-bottom: 25px;
+        flex-grow: 1;
+    }
+
+    .job-details {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        margin-top: auto;
+    }
+
+    .job-detail {
+        display: flex;
+        align-items: center;
+        font-size: 0.95rem;
+        color: #555;
+    }
+
+    .job-detail i {
+        margin-right: 10px;
+        color: var(--primary-navy);
+        width: 24px;
+        height: 24px;
+        background: rgba(10, 36, 99, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .job-card-footer {
+        padding: 20px 25px;
+        background-color: var(--light-gray);
+        border-top: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .job-salary {
+        font-weight: 700;
+        color: var(--primary-navy);
+        font-size: 1.1rem;
+    }
+
+    .btn-view-details {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--accent-gold);
+        color: var(--primary-navy);
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+    .btn-view-details:hover {
+        background: #e6b400;
+        transform: translateY(-2px);
+    }
+
+    /* Featured Ribbon */
+    .featured-ribbon {
+        position: absolute;
+        top: 15px;
+        left: -30px;
+        background: var(--accent-gold);
+        color: var(--primary-navy);
+        padding: 8px 35px;
+        font-size: 0.9rem;
+        font-weight: 700;
+        transform: rotate(-45deg);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+
+    @media (max-width: 992px) {
+        .jobs-grid {
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .section-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .jobs-section {
+            padding: 60px 0;
+        }
+
+        .jobs-grid {
+            grid-template-columns: 1fr;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .job-card {
+            max-width: 100%;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .job-details {
+            grid-template-columns: 1fr;
+        }
+
+        .job-card-footer {
+            flex-direction: column;
+            gap: 15px;
+            align-items: flex-start;
+        }
+
+        .btn-all-offers {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
 </style>
 {% endblock %}
 
@@ -301,44 +546,77 @@
         </div>
     </div>
 </section>
-
-<!-- Stats Section -->
-<section class="stats-section">
+<!-- Section: Job Offers -->
+<section class="jobs-section">
     <div class="container">
-        <div class="row">
-            <div class="col-md-4 stat-container">
-                <div class="stat-circle">
-                    <div>
-                        <span class="stat-number" id="companies-count">50</span>
-                        <span class="stat-number">+</span>
-                    </div>
-                </div>
-                <h3 class="stat-label">Companies Served</h3>
+        <div class="section-header">
+            <div>
+                <h2 class="section-title">Open Job Opportunities</h2>
+                <p class="section-subtitle">Explore roles that match your passion and expertise</p>
             </div>
-            <div class="col-md-4 stat-container">
-                <div class="stat-circle">
-                    <div>
-                        <span class="stat-number" id="recruiters-count">300</span>
-                        <span class="stat-number">+</span>
+            <a href="{% url 'job_listings' %}" class="btn-all-offers">
+                Check All Offers <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <div class="jobs-content">
+            <div id="jobs-grid" class="jobs-grid">
+                <!-- Job cards -->
+                {% for job in jobs %}
+                {% if job.is_active %}
+                <div class="job-card">
+                    <div class="job-card-header">
+                        <h3 class="job-title">{{ job.title }}</h3>
+                        <p class="company-name">{{ job.company }}</p>
+                    </div>
+
+                    <div class="job-card-body">
+                        <div class="company-logo-container">
+                            {% if job.logo %}
+                                <img src="{{ job.logo.url }}" class="company-logo" alt="{{ job.company }}">
+                            {% else %}
+                                <i class="fas fa-building fa-2x text-muted"></i>
+                            {% endif %}
+                        </div>
+
+                        <p class="job-description">
+                            {{ job.description|truncatewords:30 }}
+                        </p>
+
+                        <div class="job-details">
+                            <div class="job-detail">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>{{ job.location }}</span>
+                            </div>
+                            <div class="job-detail">
+                                <i class="fas fa-money-bill-wave"></i>
+                                <span>EGP {{ job.price|floatformat:"0" }}</span>
+                            </div>
+                            {% if job.is_remote %}
+                            <div class="job-detail">
+                                <i class="fas fa-home"></i>
+                                <span>Remote</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="job-card-footer">
+                        <a href="{% url 'job_details' job.id %}" class="btn-view-details">
+                            View Details <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
                     </div>
                 </div>
-                <h3 class="stat-label">Expert Recruiters</h3>
-            </div>
-            <div class="col-md-4 stat-container">
-                <div class="stat-circle">
-                    <div>
-                        <span class="stat-number" id="placements-count">5K</span>
-                        <span class="stat-number">+</span>
-                    </div>
-                </div>
-                <h3 class="stat-label">Successful Placements</h3>
+                {% endif %}
+                {% endfor %}
             </div>
         </div>
     </div>
 </section>
 
+
 <!-- How It Works Section -->
-<section id="process" class="process-section">
+<section id="process" class="process-section mt-4">
     <div class="container">
         <h2 class="section-title">How It Works</h2>
         <div class="process-steps">
@@ -388,22 +666,13 @@
             <div class="col-lg-10">
                 <div class="client-carousel owl-carousel owl-theme">
                     <div class="client-logo">
-                        <img src="{% static 'images/client1.svg' %}" alt="Tech Innovate">
+                        <img src="{% static 'images/TP.webp' %}" alt="Tech Innovate">
                     </div>
                     <div class="client-logo">
-                        <img src="{% static 'images/client2.svg' %}" alt="Global Solutions">
+                        <img src="{% static 'images/cx.webp' %}" alt="Future Enterprises">
                     </div>
                     <div class="client-logo">
-                        <img src="{% static 'images/client3.svg' %}" alt="Future Enterprises">
-                    </div>
-                    <div class="client-logo">
-                        <img src="{% static 'images/client1.svg' %}" alt="Prime Holdings">
-                    </div>
-                    <div class="client-logo">
-                        <img src="{% static 'images/client5.svg' %}" alt="Venture Partners">
-                    </div>
-                    <div class="client-logo">
-                        <img src="{% static 'images/client6.svg' %}" alt="Stellar Group">
+                        <img src="{% static 'images/oct.webp' %}" alt="Prime Holdings">
                     </div>
                 </div>
             </div>
@@ -494,20 +763,20 @@
 {% block seo_extra %}
 <!-- Page-specific structured data -->
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "name": "Career Core Recruitment Solutions",
-  "description": "Connecting top talent with industry-leading companies through innovative recruitment solutions.",
-  "publisher": {
-    "@type": "Organization",
-    "name": "Career Core",
-    "logo": "{% static 'images/logo.svg' %}"
-  },
-  "mainEntityOfPage": {
+    {
+    "@context": "https://schema.org",
     "@type": "WebPage",
-    "@id": "https://www.careercore.example.com"
-  }
-}
+    "name": "Career Core Recruitment Solutions",
+    "description": "Connecting top talent with industry-leading companies through innovative recruitment solutions.",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Career Core",
+        "logo": "{% static 'images/logo.svg' %}"
+    },
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://www.careercore.example.com"
+    }
+    }
 </script>
 {% endblock %}

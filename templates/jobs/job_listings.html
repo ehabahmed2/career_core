@@ -261,7 +261,7 @@
             <div id="jobs-grid" class="jobs-grid">
                 <!-- Job cards will be loaded here via AJAX -->
                 {% for job in jobs %}
-                {% if not job.is_active %}
+                {% if job.is_active %}
                 <div class="job-card">
                 <div class="job-card-header">
                     <h3 class="job-title">{{ job.title }}</h3>
