@@ -4,6 +4,7 @@ from django.contrib.auth import login, logout, authenticate, get_user_model
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 
+
 from .models import BaseUser, RecruiterProfile, AdminProfile, PasswordResetToken
 from jobs.models import Job
 from django.http import HttpResponseForbidden, JsonResponse
@@ -86,7 +87,7 @@ def logout_form(request):
     messages.success(request, 'Logged out')
     return redirect('home')
 
-# register user
+
 def register(request):
     if request.user.is_authenticated:
         messages.info(request, 'You are logged in already!')
@@ -110,7 +111,6 @@ def register(request):
         else:
             form = RegisterForm()
     return render(request, 'users/register.html', context={'form':form})
-
 
 def registration_success(request, token):
     if not cache.get(f'reg_success_{token}'):
@@ -138,7 +138,6 @@ def all_recruiters(request):
         recruiters = BaseUser.objects.filter(role=BaseUser.Role.RECRUITER).select_related('recruiter_profile')
 
     return render(request, 'users/all_recruiters.html', context={'recruiters': recruiters})
-
 
 @require_POST
 def recruiter_action(request, recruiter_id):

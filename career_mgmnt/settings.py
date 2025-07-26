@@ -186,12 +186,5 @@ LOGIN_URL = 'login'  # Your login route name
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
-
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'unique-snowflake',
-        'TIMEOUT': 300,  # 5 minutes
-    }
-}
+SESSION_COOKIE_SAMESITE = 'Lax'  # Or 'None' if using cross-site
+SESSION_SAVE_EVERY_REQUEST = True  # Helps with session persistence
