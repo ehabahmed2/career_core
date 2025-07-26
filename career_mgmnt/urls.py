@@ -46,3 +46,6 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+else:
+    # For production
+    urlpatterns += static('/admin/static/', document_root=os.path.join(settings.BASE_DIR, 'staticfiles/admin'))
