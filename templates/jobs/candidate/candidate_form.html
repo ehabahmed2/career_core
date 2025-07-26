@@ -421,27 +421,28 @@
         
         // WhatsApp number formatting
         const whatsappInput = document.getElementById('id_whatsapp');
+
         if (whatsappInput) {
-            whatsappInput.addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, '');
-                
-                // Format as +20 123 456 7890
-                if (value.length > 2) {
-                    value = '+' + value.substring(0, 2) + ' ' + value.substring(2);
+            whatsappInput.addEventListener('input', function (e) {
+                let value = e.target.value;
+
+                // Keep only digits, but allow leading '+' (international code)
+                value = value.replace(/[^\d+]/g, '');
+
+                // Ensure only one '+' at the beginning
+                if (value.indexOf('+') > 0) {
+                    value = '+' + value.replace(/\+/g, '');
                 }
-                if (value.length > 6) {
-                    value = value.substring(0, 6) + ' ' + value.substring(6);
-                }
-                if (value.length > 10) {
-                    value = value.substring(0, 10) + ' ' + value.substring(10);
-                }
-                if (value.length > 15) {
-                    value = value.substring(0, 15);
-                }
-                
+
+                // Format with spaces every few digits (e.g., +20 101 234 5678)
+                value = value.replace(/(\+\d{1,4})(\d{1,3})?(\d{1,3})?(\d{1,4})?/, function (_, code, p1, p2, p3) {
+                    return [code, p1, p2, p3].filter(Boolean).join(' ');
+                });
+
                 e.target.value = value;
             });
         }
+
     });
 </script>
 {% endblock %}
