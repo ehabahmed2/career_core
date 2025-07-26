@@ -184,7 +184,8 @@ LOGIN_URL = 'login'  # Your login route name
 
 #enabling https
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SAMESITE = 'Lax'  # Or 'None' if using cross-site
 SESSION_SAVE_EVERY_REQUEST = True  # Helps with session persistence
+SESSION_COOKIE_DOMAIN = None  # Must be None on PythonAnywhere
+SESSION_COOKIE_SECURE = False  # Must be False unless using HTTPS
+SESSION_COOKIE_SAMESITE = 'Lax'  # 'None' only if using HTTPS
+CSRF_COOKIE_SECURE = False  # Same as above
