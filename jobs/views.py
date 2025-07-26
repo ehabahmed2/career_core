@@ -27,6 +27,10 @@ def create_offer(request):
         form = CreateJobForm(request.POST)
         if form.is_valid():
             job = form.save(commit=False)
+            # Automatically set location if is_remote is True
+            if job.is_remote:
+                job.location = 'Remote'
+                
             job.user = request.user  # Set the user manually
             job.save()
             messages.success(request, 'Job offer added successfully!')

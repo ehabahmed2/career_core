@@ -253,6 +253,191 @@
         border: none;
         cursor: pointer;
     }
+
+
+
+
+
+    /* Enhanced responsive styles */
+    @media (max-width: 767px) {
+        .full-management-header {
+            padding: 1rem;
+        }
+        
+        .full-management-header .d-flex {
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .full-management-header .btn {
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+        
+        .card-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        
+        .card-header h4,
+        .card-header h5 {
+            font-size: 1.1rem;
+        }
+        
+        .filter-section .row {
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .filter-section .col-md-4 {
+            width: 100%;
+            max-width: 100%;
+        }
+        
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            display: block;
+            width: 100%;
+        }
+        
+        .table {
+            width: 100%;
+            font-size: 0.85rem;
+        }
+        
+        .table th, 
+        .table td {
+            padding: 0.5rem;
+            min-width: 120px;
+        }
+        
+        .action-buttons {
+            flex-wrap: wrap;
+            gap: 3px;
+        }
+        
+        .action-buttons .btn {
+            padding: 0.2rem 0.4rem;
+            font-size: 0.75rem;
+        }
+        
+        .pagination {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+    
+        
+        .user-info {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+        
+        /* Search bar adjustments */
+        .card-body > .d-flex {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 0.5rem;
+        }
+        
+        .card-body > .d-flex > .d-flex {
+            width: 100%;
+        }
+        
+        /* Table cell adjustments */
+        td {
+            position: relative;
+            padding-left: 40% !important;
+        }
+        
+        td:before {
+            position: absolute;
+            left: 0.5rem;
+            width: 35%;
+            padding-right: 0.5rem;
+            white-space: nowrap;
+            font-weight: 600;
+        }
+        
+        /* Table headers for mobile */
+        thead {
+            display: none;
+        }
+        
+        tr {
+            display: block;
+            margin-bottom: 1rem;
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+        }
+        
+        td {
+            display: flex;
+            width: 100% !important;
+            border: none;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        td:last-child {
+            border-bottom: none;
+        }
+        
+        /* Label each row */
+        td:nth-of-type(1):before { content: "Name:"; }
+        td:nth-of-type(2):before { content: "Email:"; }
+        td:nth-of-type(3):before { content: "Type:"; }
+        td:nth-of-type(4):before { content: "Status:"; }
+        td:nth-of-type(5):before { content: "Actions:"; }
+        
+        /* Action buttons container */
+        .recruiter-actions {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .recruiter-actions form,
+        .recruiter-actions > button {
+            width: 100%;
+            margin-right: 0;
+        }
+        
+        .recruiter-actions .action-btn {
+            width: 100%;
+            justify-content: center;
+        }
+        
+        /* Pagination adjustments */
+        .pagination-controls .pagination {
+            flex-wrap: wrap;
+        }
+        
+        .page-item {
+            margin-bottom: 0.25rem;
+        }
+    }
+    
+    /* Adjustments for very small screens */
+    @media (max-width: 480px) {
+        .table th, 
+        .table td {
+            min-width: 100px;
+            font-size: 0.8rem;
+        }
+        
+        .full-management-header h2 {
+            font-size: 1.3rem;
+        }
+        
+        td {
+            padding-left: 45% !important;
+        }
+        
+        td:before {
+            width: 40%;
+        }
+    }
 </style>
 {% endblock %}
 

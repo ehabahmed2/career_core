@@ -247,26 +247,26 @@
         const remoteCheckbox = document.getElementById('id_is_remote');
         const locationField = document.getElementById('id_location');
         
-        // Handle remote checkbox change
         if (remoteCheckbox && locationField) {
             remoteCheckbox.addEventListener('change', function() {
-                if(this.checked) {
+                if (this.checked) {
                     locationField.value = 'Remote';
-                    locationField.disabled = true;
+                    locationField.readOnly = true;
                 } else {
-                    locationField.disabled = false;
-                    if(locationField.value === 'Remote') {
+                    locationField.readOnly = false;
+                    if (locationField.value === 'Remote') {
                         locationField.value = '';
                     }
                 }
             });
-            
-            // Initialize on page load
-            if(remoteCheckbox.checked) {
+
+            // Set initial state on page load
+            if (remoteCheckbox.checked) {
                 locationField.value = 'Remote';
-                locationField.disabled = true;
+                locationField.readOnly = true;
             }
         }
     });
 </script>
+
 {% endblock %}

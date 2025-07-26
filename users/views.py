@@ -212,24 +212,29 @@ def update_profile(request):
 @login_required
 def edit_job(request, pk):
     user = request.user
-    # Safe check for permissions
-    is_head_recruiter = False
-    if hasattr(user, 'recruiter_profile'):
-        is_head_recruiter = user.recruiter_profile.is_head_recruiter
+    is_head_recruiter = getattr(user.recruiter_profile, 'is_head_recruiter', False) if hasattr(user, 'recruiter_profile') else False
 
     if not (user.is_admin or user.is_superuser or is_head_recruiter):
         return HttpResponseForbidden("You don't have permission to access this page")
     
     job = get_object_or_404(Job, id=pk)
+    
     if request.method == 'POST':
-        form = CreateJobForm(request.POST,instance=job)
+        form = CreateJobForm(request.POST, instance=job)
         if form.is_valid():
-            form.save()
+            updated_job = form.save(commit=False)
+
+            # Check from cleaned_data
+            if form.cleaned_data.get('is_remote'):
+                updated_job.location = 'Remote'
+
+            updated_job.save()
             messages.success(request, 'Updated offer')
             return redirect('admin_dashboard')
     else:
         form = CreateJobForm(instance=job)
-    return render(request, 'jobs/edit_job.html', context={'form':form})
+
+    return render(request, 'jobs/edit_job.html', context={'form': form})
 
 
 @require_POST

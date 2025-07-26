@@ -60,3 +60,4 @@ class CandidateApplicationForm(forms.ModelForm):
             # Make all fields required except these two
             if name not in ('other_language_1', 'other_language_2'):
                 field.required = True
+
