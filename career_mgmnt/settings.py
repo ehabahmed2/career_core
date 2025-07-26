@@ -189,3 +189,6 @@ SESSION_COOKIE_DOMAIN = None  # Must be None on PythonAnywhere
 SESSION_COOKIE_SECURE = False  # Must be False unless using HTTPS
 SESSION_COOKIE_SAMESITE = 'Lax'  # 'None' only if using HTTPS
 CSRF_COOKIE_SECURE = False  # Same as above
+
+
+# give that a go
