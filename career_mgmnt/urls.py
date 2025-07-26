@@ -47,5 +47,6 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 else:
-    # For production
-    urlpatterns += static('/admin/static/', document_root=os.path.join(settings.BASE_DIR, 'staticfiles/admin'))
+    # Force static serving in production
+    urlpatterns += static('/static/', document_root='/home/careercore/career_core/staticfiles')
+    urlpatterns += static('/static/admin/', document_root='/home/careercore/venv/lib/python3.13/site-packages/django/contrib/admin/static/admin')
