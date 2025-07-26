@@ -191,4 +191,4 @@ SESSION_COOKIE_SAMESITE = 'Lax'  # 'None' only if using HTTPS
 CSRF_COOKIE_SECURE = False  # Same as above
 
 
-# give that a go
+# updated 
