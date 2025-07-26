@@ -41,7 +41,7 @@ class CandidateDetails(models.Model):
     other_language_2 = models.CharField(max_length=50, blank=True, null=True)
     
     application_date = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(default='pending')
+    status = models.CharField(default='pending', max_length=255)
 
     def __str__(self):
         return f"{self.full_name} - {self.job.title if self.job else 'No Job'}"
