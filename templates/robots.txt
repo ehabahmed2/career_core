@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /users/
+Disallow: /media/
+Disallow: /jobs/all-applications/
+Allow: /
+Allow: /
+Sitemap: https://careercore.pythonanywhere.com/sitemap.xml

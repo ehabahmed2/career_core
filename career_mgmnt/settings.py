@@ -34,7 +34,7 @@ if DEBUG:
 else:
     ALLOWED_HOSTS = [
         'careercore.pythonanywhere.com',
-        'career-core.com'
+        # 'career-core.com'
     ]
 
 
@@ -55,6 +55,9 @@ INSTALLED_APPS = [
     'testimonials',
     'users',
     'services',
+    
+    #adding sitemap
+    'django.contrib.sitemaps',
 ]
 
 MIDDLEWARE = [
@@ -95,6 +98,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+        'OPTIONS': {
+            'timeout': 20,  # Increase timeout
+        }
     }
 }
 
@@ -175,3 +181,17 @@ PASSWORD_RESET_TIMEOUT = 259200
 
 # URLs
 LOGIN_URL = 'login'  # Your login route name
+
+#enabling https
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+        'TIMEOUT': 300,  # 5 minutes
+    }
+}

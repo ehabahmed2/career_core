@@ -24,22 +24,22 @@
 
     <!-- Schema.org Organization Markup -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "Career Core",
-        "url": "https://www.careercore.example.com",
-        "logo": "{% static 'img/logo.png' %}",
-        "contactPoint": {
-            "@type": "ContactPoint",
-            "telephone": "+20 123 456 7890",
-            "contactType": "Customer service"
-        },
-        "sameAs": [
-            "https://www.linkedin.com/company/careercore",
-            "https://twitter.com/careercore"
-        ]
-    }
+        {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Career Core",
+            "url": "https://www.careercore.example.com",
+            "logo": "{% static 'img/logo.png' %}",
+            "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+20 123 456 7890",
+                "contactType": "Customer service"
+            },
+            "sameAs": [
+                "https://www.linkedin.com/company/careercore",
+                "https://twitter.com/careercore"
+            ]
+        }
     </script>
 
     <!-- CSS Includes -->
@@ -47,6 +47,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
     
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9L0NFSR27L"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-9L0NFSR27L');
+    </script>
+
+
+
     <!-- Color Variables -->
     <style>
         :root {
